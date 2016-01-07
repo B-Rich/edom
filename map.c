@@ -110,6 +110,18 @@ unsigned int getblock_type_map(Map *m,int x,int y)
   return(m->tiles[(int)(m->dat[x+y*m->w])].type);
 }
 
+void get_tile_size_map(Map *m, int *w, int *h)
+{
+  *w = m->tw;
+  *h = m->th;
+}
+
+void get_screen_size_map(Map *m, int *w, int *h)
+{
+  *w = m->w * m->tw;
+  *h = m->h * m->th;
+}
+
 void update_animations_map(Map *m)
 {
   static int dir = 1;

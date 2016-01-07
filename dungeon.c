@@ -72,12 +72,12 @@ void init_dungeon(void)
 {
   create_complete_dungeon();
 
-  tiles = load_sprite("tiles.png", 32, 64);
+  tiles = load_sprite("tiles.png", TILE_WIDTH, TILE_HEIGHT);
   if (tiles == NULL) {
     exit(1);
   }
 
-  tile_map = new_map(32, 64, 4, MAP_W, MAP_H);
+  tile_map = new_map(TILE_WIDTH, TILE_HEIGHT, 4, MAP_W, MAP_H);
   if (tile_map == NULL) {
     exit(1);
   }
@@ -648,6 +648,7 @@ void print_tile(coord x, coord y)
 void print_tile_at_position(coord x, coord y)
 {
   byte tile;
+  byte subtile;
 
   if (x <  0 || y < 0 || x > MAP_W || y > MAP_H || !is_known(x, y))
   {
@@ -676,7 +677,8 @@ void print_tile_at_position(coord x, coord y)
     }
     else if (tile == ROCK)
     {
-      if (map[x][y+1] == ROCK)
+      subtile = (y+1 < MAP_H) ? map[x][y+1] : tile;
+      if (subtile == ROCK)
       {
         puttile_map(tile_map, x, y, TILE_ROCK);
       }
@@ -917,19 +919,34 @@ void set_knowledge(coord x, coord y, byte known)
 void draw_dungeon(void)
 {
   int sx, sy;
-  sx = d.px * 32 - 320;
-  sy = d.py * 64 - 240;
+  int tw, th;
+  int mw, mh;
+
+  get_tile_size_map(tile_map, &tw, &th);
+  get_screen_size_map(tile_map, &mw, &mh);
+
+  sx = d.px * tw - screen_width / 2;
+  sy = d.py * th - screen_height / 2;
+
   if (sx < 0)
   {
     sx = 0;
+  }
+  if (sx > mw - screen_width / 2)
+  {
+    sx = mw - screen_width / 2;
   }
 
   if (sy < 0)
   {
     sy = 0;
   }
+  if (sy > mh - screen_height / 2)
+  {
+    sy = mh - screen_height / 2;
+  }
 
-  draw_map(0, 0, 640, 480, 1, tile_map, sx, sy, tiles);
+  draw_map(0, 0, screen_width, screen_height, 1, tile_map, sx, sy, tiles);
 
   flip();
 }

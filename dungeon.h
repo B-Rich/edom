@@ -59,6 +59,9 @@ enum direction
  * Graphical tiles for map
  */
 
+#define TILE_WIDTH   32
+#define TILE_HEIGHT  64
+
 #define TILE_UNKNOWN 0
 #define TILE_FLOOR   1
 #define TILE_ROCK    2

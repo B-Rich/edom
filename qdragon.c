@@ -40,8 +40,8 @@
 
 
 static SDL_Surface *screen;
-static int screen_width = 640;
-static int screen_height = 480;
+int screen_width = 640;
+int screen_height = 480;
 
 /*
  * Local prototypes.

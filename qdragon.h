@@ -109,6 +109,9 @@ struct dungeon_complex
 /* The global dungeon structure. */
 extern struct dungeon_complex d;
 
+extern int screen_width;
+extern int screen_height;
+
 void flip(void);
 
 #endif

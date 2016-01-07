@@ -57,6 +57,8 @@ extern unsigned int gettile_map(Map *m,int x,int y);
 extern unsigned int gettile_type_map(Map *m,int x,int y);
 extern unsigned int getblock_index_map(Map *m,int x,int y);
 extern unsigned int getblock_type_map(Map *m,int x,int y);
+extern void get_tile_size_map(Map *m, int *w, int *h);
+extern void get_screen_size_map(Map *m, int *w, int *h);
 extern void update_animations_map(Map *m);
 
 #endif
