@@ -17,20 +17,20 @@ OBJ = main.o dungeon.o sysdep.o error.o game.o misc.o monster.o player.o sprite.
 # Linux
 
 CC     = gcc
-LFLAGS = -g -o qdragon -lncurses -lSDL -lSDL_image
+LFLAGS = -g -o edom -lncurses -lSDL -lSDL_image
 CFLAGS = -g -Wall -pedantic -Dlinux -DSDL_GFX -I/usr/include/SDL
 
 # DOS
 
 #CC = gcc
-#LFLAGS = -o qdragon
+#LFLAGS = -o edom
 #CFLAGS = -Wall -O2
 
 #
 # Targets.
 #
 
-qdragon: $(OBJ) 
+edom: $(OBJ) 
 	gcc $(OBJ) $(LFLAGS)
 
 depend:
@@ -40,7 +40,7 @@ depend:
 	@echo Done.
 
 clean:
-	rm *.o qdragon
+	rm *.o edom
 
 count:
 	wc *.c *.h Makefile
