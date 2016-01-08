@@ -20,7 +20,7 @@
  */
 
 
-#include "qdragon.h"
+#include "main.h"
 
 
 /*

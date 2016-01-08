@@ -27,7 +27,7 @@
  * Global includes.
  */
 
-#include "qdragon.h"
+#include "main.h"
 
 
 

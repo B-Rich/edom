@@ -1,15 +1,15 @@
-dungeon.o: dungeon.c qdragon.h config.h dungeon.h sysdep.h error.h \
+dungeon.o: dungeon.c main.h config.h dungeon.h sysdep.h error.h \
  game.h misc.h monster.h player.h sprite.h map.h draw_map.h
 error.o: error.c error.h
-game.o: game.c qdragon.h config.h dungeon.h sysdep.h error.h game.h \
+game.o: game.c main.h config.h dungeon.h sysdep.h error.h game.h \
  misc.h monster.h player.h
-misc.o: misc.c qdragon.h config.h dungeon.h sysdep.h error.h game.h \
+misc.o: misc.c main.h config.h dungeon.h sysdep.h error.h game.h \
  misc.h monster.h player.h
-monster.o: monster.c qdragon.h config.h dungeon.h sysdep.h error.h \
+monster.o: monster.c main.h config.h dungeon.h sysdep.h error.h \
  game.h misc.h monster.h player.h
-player.o: player.c qdragon.h config.h dungeon.h sysdep.h error.h game.h \
+player.o: player.c main.h config.h dungeon.h sysdep.h error.h game.h \
  misc.h monster.h player.h
-qdragon.o: qdragon.c qdragon.h config.h dungeon.h sysdep.h error.h game.h \
+qdragon.o: qdragon.c main.h config.h dungeon.h sysdep.h error.h game.h \
  misc.h monster.h player.h
-sysdep.o: sysdep.c qdragon.h config.h dungeon.h sysdep.h error.h game.h \
+sysdep.o: sysdep.c main.h config.h dungeon.h sysdep.h error.h game.h \
  misc.h monster.h player.h

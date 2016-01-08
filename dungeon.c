@@ -24,7 +24,7 @@
 #include "sprite.h"
 #include "map.h"
 #include "draw_map.h"
-#include "qdragon.h"
+#include "main.h"
 
 
 /*

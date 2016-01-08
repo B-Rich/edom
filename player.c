@@ -24,7 +24,7 @@
  */
 
 #include <string.h>
-#include "qdragon.h"
+#include "main.h"
 
 
 /*

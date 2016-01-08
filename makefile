@@ -8,7 +8,7 @@
 # Object files.
 #
 
-OBJ = qdragon.o dungeon.o sysdep.o error.o game.o misc.o monster.o player.o sprite.o map.o draw_map.o
+OBJ = main.o dungeon.o sysdep.o error.o game.o misc.o monster.o player.o sprite.o map.o draw_map.o
 
 #
 # Compiler stuff -- adjust to your system.
