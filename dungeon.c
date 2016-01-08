@@ -681,7 +681,10 @@ void print_tile_at_position(coord x, coord y)
     {
       if (y+1 >= 0 && y+1 < MAP_H && map[x][y+1] != ROCK)
       {
-        puttile_map(tile_map, x, y-1, start_tile + TILE_ROCK);
+        if (y-1 >= 0 && y-1 < MAP_H)
+        {
+          puttile_map(tile_map, x, y-1, start_tile + TILE_ROCK);
+        }
         puttile_map(tile_map, x, y, start_tile + TILE_WALL);
       }
       else
