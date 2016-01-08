@@ -104,6 +104,9 @@ int main(int argc, char **argv)
   if (argc > 1)
     tile_base = atoi(argv[1]);
   
+  if (!init())
+    return 1;
+
   stdprtstr("Setting up the game...");
   
   /* Initialize everything. */
@@ -118,9 +121,6 @@ int main(int argc, char **argv)
   stdprtstr(".");
   init_io();
   
-  if (!init())
-    return 1;
-
   /* Play the game. */
   play();
 

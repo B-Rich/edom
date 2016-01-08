@@ -231,6 +231,8 @@ void update_screen(coord x, coord y)
     know_section(sx, sy);
 
   draw_dungeon();
+  draw_player();
+  flip();
 }
 
 

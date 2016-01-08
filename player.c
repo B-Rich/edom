@@ -23,7 +23,9 @@
  * Includes.
  */
 
+#include <stdlib.h>
 #include <string.h>
+#include "sprite.h"
 #include "main.h"
 
 
@@ -43,6 +45,7 @@ static char *tskill_s[MAX_T_SKILL] =
 };
 
 
+static SPRITE *player_sprite;
 
 /*
  * Local prototypes.
@@ -60,6 +63,13 @@ void increase_training_skill(byte);
 void init_player(void)
 {
   byte i;
+
+  player_sprite = load_sprite("aron.png", 24, 32);
+  if (player_sprite == NULL)
+  {
+    printf("Fatal Error -- Unable to load player sprite\n");
+    exit(1);
+  }
 
   /* Initial attributes. */
   for (i = 0; i < MAX_ATTRIBUTE; i++)
@@ -454,3 +464,10 @@ void score_exp(int32 x)
   /* Update the changes. */
   update_necessary = TRUE;
 }
+
+void draw_player(void)
+{
+  draw_sprite(screen_width / 2, screen_height / 2, 0, player_sprite,
+              0, 0, screen_width, screen_height);
+}
+

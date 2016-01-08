@@ -30,7 +30,6 @@
 #include "config.h"
 
 
-
 /*
  * Some more constants.
  */
@@ -111,5 +110,6 @@ void update_player_status(void);
 void set_attribute(byte, byte);
 void adjust_training(void);
 void score_exp(int32);
+void draw_player(void);
 
 #endif

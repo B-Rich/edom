@@ -972,7 +972,5 @@ void draw_dungeon(void)
   }
 
   draw_map(0, 0, screen_width, screen_height, 1, tile_map, sx, sy, tiles);
-
-  flip();
 }
 
