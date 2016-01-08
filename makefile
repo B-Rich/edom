@@ -18,7 +18,7 @@ OBJ = main.o dungeon.o sysdep.o error.o game.o misc.o monster.o player.o sprite.
 
 CC     = gcc
 LFLAGS = -g -o edom -lncurses -lSDL -lSDL_image
-CFLAGS = -g -Wall -pedantic -Dlinux -DSDL_GFX -I/usr/include/SDL
+CFLAGS = -g -Wall -Dlinux -DSDL_GFX -I/usr/include/SDL
 
 # DOS
 

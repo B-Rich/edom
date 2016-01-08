@@ -77,7 +77,7 @@ void init_dungeon(void)
     exit(1);
   }
 
-  tile_map = new_map(TILE_WIDTH, TILE_HEIGHT, 4, MAP_W, MAP_H);
+  tile_map = new_map(TILE_WIDTH, TILE_HEIGHT, NUM_TILES, MAP_W, MAP_H);
   if (tile_map == NULL) {
     exit(1);
   }
@@ -648,7 +648,6 @@ void print_tile(coord x, coord y)
 void print_tile_at_position(coord x, coord y)
 {
   byte tile;
-  byte subtile;
 
   if (x <  0 || y < 0 || x > MAP_W || y > MAP_H || !is_known(x, y))
   {
@@ -677,14 +676,14 @@ void print_tile_at_position(coord x, coord y)
     }
     else if (tile == ROCK)
     {
-      subtile = (y+1 < MAP_H) ? map[x][y+1] : tile;
-      if (subtile == ROCK)
+      if (y+1 >= 0 && y+1 < MAP_H && map[x][y+1] != ROCK)
       {
-        puttile_map(tile_map, x, y, TILE_ROCK);
+        puttile_map(tile_map, x, y-1, TILE_ROCK);
+        puttile_map(tile_map, x, y, TILE_WALL);
       }
       else
       {
-        puttile_map(tile_map, x, y, TILE_WALL);
+        puttile_map(tile_map, x, y, TILE_ROCK);
       }
     }
   }
