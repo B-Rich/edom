@@ -47,37 +47,12 @@ int screen_height = 480;
  * Local prototypes.
  */
 
-void init_screen(void);
-
+int init(void);
 
 /*
  * Local functions.
  */
 
-
-/*
- * Draw a title screen.
- */
-
-void init_screen(void)
-{
-  char s[80];
-  
-  clear_screen();
-  strcpy(s, string("-----====<<<<< QHack %d.%d >>>>>====-----"
-		   , MAJOR_VERSION, MINOR_VERSION));
-  cursor((80 - strlen(s)) >> 1, 3);
-  prtstr("%s", s);
-  cursor(16, 5);
-  prtstr("(The Quickest Roguelike Gaming Hack on the Net)");
-  cursor(19, 8);
-  prtstr("(C) Copyright 1996, 1997 by Thomas Biskup.");
-  cursor(30, 9);
-  prtstr("All Rights Reserved.");
-  cursor(0, 24);
-  prtstr("Email comments/suggestions/bug reports to ............... rpg@saranxis.ruhr.de");
-  getkey();
-}
 
 int init(void)
 {
@@ -116,8 +91,6 @@ void flip(void)
 int main(int argc, char **argv)
 {
   /* Print startup message. */
-  printf("\nQuickHack Version 0.1\n");
-  printf("(C) Copyright 1996, 1997 by Thomas Biskup.\n\n");
   printf("Current dungeon size: %ld.\n"
 	 , (long int) sizeof(struct dungeon_complex));
   printf("Current monster size: %ld.\n"
@@ -142,7 +115,6 @@ int main(int argc, char **argv)
   init_dungeon();
   stdprtstr(".");
   init_io();
-  init_screen();
   
   if (!init())
     return 1;
