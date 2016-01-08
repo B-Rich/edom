@@ -673,9 +673,29 @@ void print_tile_at_position(coord x, coord y)
     }
 
     tile = map[x][y];
-    if (tile == FLOOR || tile == OPEN_DOOR)
+    if (tile == FLOOR)
     {
       puttile_map(tile_map, x, y, start_tile + TILE_FLOOR);
+    }
+    else if (tile == OPEN_DOOR)
+    {
+      puttile_map(tile_map, x, y, start_tile + TILE_DOOR_OP);
+    }
+    else if (tile == CLOSED_DOOR)
+    {
+      puttile_map(tile_map, x, y, start_tile + TILE_DOOR_CL);
+    }
+    else if (tile == LOCKED_DOOR)
+    {
+      puttile_map(tile_map, x, y, start_tile + TILE_DOOR_LK);
+    }
+    else if (tile == STAIR_DOWN)
+    {
+      puttile_map(tile_map, x, y, start_tile + TILE_STAIR_D);
+    }
+    else if (tile == STAIR_UP)
+    {
+      puttile_map(tile_map, x, y, start_tile + TILE_STAIR_U);
     }
     else if (tile == ROCK)
     {
