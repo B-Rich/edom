@@ -68,6 +68,8 @@ enum direction
 #define TILE_WALL    2
 #define NUM_TILES    4
 
+#define TOTAL_NUM_TILES 8
+
 /*
  * Global variables.
  */
@@ -90,7 +92,7 @@ BOOL is_known(coord, coord);
 
 char tile_at(coord, coord);
 
-void init_dungeon(void);
+void init_dungeon(int tile_base);
 void build_map(void);
 void print_map(void);
 void know(coord, coord);

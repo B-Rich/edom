@@ -33,6 +33,7 @@
 
 static byte existence_chance;
 static byte map[MAP_W][MAP_H];
+static int start_tile;
 static SPRITE *tiles;
 static Map *tile_map;
 
@@ -68,21 +69,23 @@ BOOL dir_possible(coord, coord, byte);
  * map.
  */
 
-void init_dungeon(void)
+void init_dungeon(int tile_base)
 {
   create_complete_dungeon();
+
+  start_tile = tile_base * NUM_TILES;
 
   tiles = load_sprite("tiles.png", TILE_WIDTH, TILE_HEIGHT);
   if (tiles == NULL) {
     exit(1);
   }
 
-  tile_map = new_map(TILE_WIDTH, TILE_HEIGHT, NUM_TILES, MAP_W, MAP_H);
+  tile_map = new_map(TILE_WIDTH, TILE_HEIGHT, TOTAL_NUM_TILES, MAP_W, MAP_H);
   if (tile_map == NULL) {
     exit(1);
   }
 
-  clear_map(tile_map, TILE_UNKNOWN);
+  clear_map(tile_map, start_tile + TILE_UNKNOWN);
 }
 
 
@@ -672,18 +675,18 @@ void print_tile_at_position(coord x, coord y)
     tile = map[x][y];
     if (tile == FLOOR || tile == OPEN_DOOR)
     {
-      puttile_map(tile_map, x, y, TILE_FLOOR);
+      puttile_map(tile_map, x, y, start_tile + TILE_FLOOR);
     }
     else if (tile == ROCK)
     {
       if (y+1 >= 0 && y+1 < MAP_H && map[x][y+1] != ROCK)
       {
-        puttile_map(tile_map, x, y-1, TILE_ROCK);
-        puttile_map(tile_map, x, y, TILE_WALL);
+        puttile_map(tile_map, x, y-1, start_tile + TILE_ROCK);
+        puttile_map(tile_map, x, y, start_tile + TILE_WALL);
       }
       else
       {
-        puttile_map(tile_map, x, y, TILE_ROCK);
+        puttile_map(tile_map, x, y, start_tile + TILE_ROCK);
       }
     }
   }

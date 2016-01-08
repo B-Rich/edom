@@ -90,6 +90,8 @@ void flip(void)
 
 int main(int argc, char **argv)
 {
+  int tile_base = 0;
+
   /* Print startup message. */
   printf("Current dungeon size: %ld.\n"
 	 , (long int) sizeof(struct dungeon_complex));
@@ -100,7 +102,7 @@ int main(int argc, char **argv)
   printf("\n");
   
   if (argc > 1)
-    return 0;
+    tile_base = atoi(argv[1]);
   
   stdprtstr("Setting up the game...");
   
@@ -112,7 +114,7 @@ int main(int argc, char **argv)
   stdprtstr(".");
   init_monsters();
   stdprtstr(".");
-  init_dungeon();
+  init_dungeon(tile_base);
   stdprtstr(".");
   init_io();
   
