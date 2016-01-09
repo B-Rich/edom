@@ -4,7 +4,8 @@
 #include "sysdep.h"
 #include "sprite.h"
 
-#define ACTOR_ANIM_TRESHOLD 10
+#define ACTOR_ANIM_TRESHOLD 4
+#define ACTOR_SPEED         2
 
 #define ACTOR_FRAME_DOWN  0
 #define ACTOR_FRAME_LEFT  3

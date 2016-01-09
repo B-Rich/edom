@@ -105,6 +105,7 @@ void play(void)
     {
       animate_dungeon();
       c = 0;
+      continue;
     }
     else
     {

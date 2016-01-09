@@ -1,3 +1,4 @@
+actor.o: actor.c config.h actor.h sysdep.h error.h
 dungeon.o: dungeon.c main.h config.h dungeon.h sysdep.h error.h \
  game.h misc.h monster.h player.h sprite.h map.h draw_map.h
 error.o: error.c error.h

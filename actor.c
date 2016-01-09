@@ -67,7 +67,7 @@ void animate_actor(struct actor *a)
 
     if (a->dx)
     {
-      a->x += a->dx;
+      a->x += a->dx * ACTOR_SPEED;
       if ((a->x % TILE_WIDTH) == 0)
       {
         a->dx = 0;
@@ -78,7 +78,7 @@ void animate_actor(struct actor *a)
 
     if (a->dy)
     {
-      a->y += a->dy;
+      a->y += a->dy * ACTOR_SPEED;
       if ((a->y % TILE_HEIGHT) == 0)
       {
         a->dy = 0;
