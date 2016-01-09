@@ -110,6 +110,7 @@ void print_tile(coord, coord);
 void print_tile_at_position(coord, coord);
 void change_door(coord, coord, byte);
 void set_knowledge(coord, coord, byte);
+void animate_dungeon(void);
 void draw_dungeon(void);
 
 #endif

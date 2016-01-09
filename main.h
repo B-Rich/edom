@@ -34,6 +34,7 @@
 #include "misc.h"
 #include "monster.h"
 #include "player.h"
+#include "actor.h"
 #include "sysdep.h"
 
 
@@ -92,6 +93,9 @@ struct dungeon_complex
   /* Last player coordinates. */
   coord opx, opy;
 
+  /* Tile map coordinates */
+  int16 map_x, map_y;
+
   /* The knowledge map. */
   byte known[MAX_DUNGEON_LEVEL][MAP_BIT_W][MAP_H];
 
@@ -103,6 +107,9 @@ struct dungeon_complex
 
   /* The player data. */
   struct player pc;
+
+  /* Player actor */
+  struct actor pa;
 };
 
 

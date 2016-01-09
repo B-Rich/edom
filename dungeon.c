@@ -941,36 +941,39 @@ void set_knowledge(coord x, coord y, byte known)
     d.known[d.dl][x >> 3][y] &= (~(1 << (x % 8)));
 }
 
+void animate_dungeon(void)
+{
+  animate_actor(&d.pa);
+}
+
 void draw_dungeon(void)
 {
-  int sx, sy;
-  int tw, th;
   int mw, mh;
 
-  get_tile_size_map(tile_map, &tw, &th);
   get_screen_size_map(tile_map, &mw, &mh);
 
-  sx = d.px * tw - screen_width / 2;
-  sy = d.py * th - screen_height / 2;
+  d.map_x = d.pa.x - screen_width / 2;
+  d.map_y = d.pa.y - screen_height / 2;
 
-  if (sx < 0)
+  if (d.map_x < 0)
   {
-    sx = 0;
+    d.map_x = 0;
   }
-  if (sx > mw - screen_width / 2)
+  if (d.map_x > mw - screen_width)
   {
-    sx = mw - screen_width / 2;
-  }
-
-  if (sy < 0)
-  {
-    sy = 0;
-  }
-  if (sy > mh - screen_height / 2)
-  {
-    sy = mh - screen_height / 2;
+    d.map_x = mw - screen_width;
   }
 
-  draw_map(0, 0, screen_width, screen_height, 1, tile_map, sx, sy, tiles);
+  if (d.map_y < 0)
+  {
+    d.map_y = 0;
+  }
+  if (d.map_y > mh - screen_height)
+  {
+    d.map_y = mh - screen_height;
+  }
+
+  draw_map(0, 0, screen_width, screen_height, 1, tile_map,
+           d.map_x, d.map_y, tiles);
 }
 

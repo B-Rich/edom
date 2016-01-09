@@ -66,8 +66,7 @@ void play(void)
   d.visited[0] = TRUE;
   
   /* Initial player position. */
-  d.px = d.opx = d.stxu[0];
-  d.py = d.opy = d.styu[0];
+  place_player(d.stxu[0], d.styu[0]);
 
   /* Initial panel position. */
   d.psx = d.psy = 0;
@@ -95,12 +94,23 @@ void play(void)
     update();
 
     /* Continue to walk or read a key. */
+#if 0
     if (!walk_mode)
     {
       walk_steps = 0;
       c = getkey();
     }
-    
+#endif
+    if (d.pa.is_moving == TRUE)
+    {
+      animate_dungeon();
+      c = 0;
+    }
+    else
+    {
+      c = getkey();
+    }
+
     /* The message line should be cleared in any case. */
     clear_messages();
     
@@ -156,22 +166,22 @@ void play(void)
 	
       case 'j':
 	if (is_open(d.px - 1, d.py))
-	  d.px--;
+          move_player(-1, 0);
 	break;
 	
       case 'l':
 	if (is_open(d.px + 1, d.py))
-	  d.px++;
+          move_player(1, 0);
 	break;
 
       case 'i':
 	if (is_open(d.px, d.py - 1))
-	  d.py--;
+          move_player(0, -1);
 	break;
 
       case 'k':
 	if (is_open(d.px, d.py + 1))
-	  d.py++;
+          move_player(0, 1);
 	break;
 	
       default:
@@ -231,7 +241,7 @@ void update_screen(coord x, coord y)
     know_section(sx, sy);
 
   draw_dungeon();
-  draw_player();
+  draw_actor(&d.pa);
   flip();
 }
 
@@ -332,44 +342,44 @@ void try(byte dir)
   {
     case N:
       if (is_open(d.px, d.py - 1))
-	d.py--;
+        move_player(0, -1);
       else if (is_open(d.px - 1, d.py) && d.px - 1 != d.opx)
-	d.px--;
+        move_player(-1, 0);
       else if (is_open(d.px + 1, d.py) && d.px + 1 != d.opx)
-	d.px++;
+        move_player(1, 0);
       else
 	walk_mode = FALSE;
       break;
       
     case S:
       if (is_open(d.px, d.py + 1))
-	d.py++;
+        move_player(0, 1);
       else if (is_open(d.px - 1, d.py) && d.px - 1 != d.opx)
-	d.px--;
+        move_player(-1, 0);
       else if (is_open(d.px + 1, d.py) && d.px + 1 != d.opx)
-	d.px++;
+        move_player(1, 0);
       else
 	walk_mode = FALSE;
       break;
       
     case E:
       if (is_open(d.px + 1, d.py))
-	d.px++;
+        move_player(1, 0);
       else if (is_open(d.px, d.py + 1) && d.py + 1 != d.opy)
-	d.py++;
+        move_player(0, 1);
       else if (is_open(d.px, d.py - 1) && d.py - 1 != d.opy)
-	d.py--;
+        move_player(0, -1);
       else
 	walk_mode = FALSE;
       break;
       
     case W:
       if (is_open(d.px - 1, d.py))
-	d.px--;
+        move_player(-1, 0);
       else if (is_open(d.px, d.py + 1) && d.py + 1 != d.opy)
-	d.py++;
+        move_player(0, 1);
       else if (is_open(d.px, d.py - 1) && d.py - 1 != d.opy)
-	d.py--;
+        move_player(0, -1);
       else
 	walk_mode = FALSE;
       break;

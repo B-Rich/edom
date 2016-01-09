@@ -110,6 +110,10 @@ void update_player_status(void);
 void set_attribute(byte, byte);
 void adjust_training(void);
 void score_exp(int32);
+
+void place_player(byte px, byte py);
+void move_player(byte dx, byte dy);
+void animate_player(void);
 void draw_player(void);
 
 #endif

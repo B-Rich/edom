@@ -25,7 +25,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "sprite.h"
 #include "main.h"
 
 
@@ -45,8 +44,6 @@ static char *tskill_s[MAX_T_SKILL] =
 };
 
 
-static SPRITE *player_sprite;
-
 /*
  * Local prototypes.
  */
@@ -64,12 +61,7 @@ void init_player(void)
 {
   byte i;
 
-  player_sprite = load_sprite("aron.png", 24, 32);
-  if (player_sprite == NULL)
-  {
-    printf("Fatal Error -- Unable to load player sprite\n");
-    exit(1);
-  }
+  init_actor(&d.pa, "aron.png", 24, 32);
 
   /* Initial attributes. */
   for (i = 0; i < MAX_ATTRIBUTE; i++)
@@ -465,9 +457,28 @@ void score_exp(int32 x)
   update_necessary = TRUE;
 }
 
-void draw_player(void)
+void place_player(byte px, byte py)
 {
-  draw_sprite(screen_width / 2, screen_height / 2, 0, player_sprite,
-              0, 0, screen_width, screen_height);
+  d.px = px;
+  d.opx = px;
+  d.pa.x = (int16) px * TILE_WIDTH;
+
+  d.py = py;
+  d.opy = py;
+  d.pa.y = (int16) py * TILE_HEIGHT;
+
+  d.pa.is_moving = FALSE;
+  d.pa.dx = 0;
+  d.pa.dy = 0;
+}
+
+void move_player(byte dx, byte dy)
+{
+  if (d.pa.is_moving == FALSE)
+  {
+    d.px += dx;
+    d.py += dy;
+    move_actor(&d.pa, dx, dy);
+  }
 }
 
