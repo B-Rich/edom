@@ -73,7 +73,7 @@ enum direction
 #define TILE_STAIR_U 6
 #define NUM_TILES    7
 
-#define TOTAL_NUM_TILES 14
+#define TOTAL_NUM_TILES 32
 
 /*
  * Global variables.
