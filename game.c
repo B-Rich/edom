@@ -21,6 +21,7 @@
 
 
 #include "main.h"
+#include "ctrl.h"
 
 
 /*
@@ -51,7 +52,7 @@ void activate_walk_mode(void);
 void play(void)
 {
   coord opx, opy;
-  char c;
+  BOOL quit = 0;
   
   /*
    * Build the current level.
@@ -93,25 +94,6 @@ void play(void)
     /* Refresh the IO stuff. */
     update();
 
-    /* Continue to walk or read a key. */
-#if 0
-    if (!walk_mode)
-    {
-      walk_steps = 0;
-      c = getkey();
-    }
-#endif
-    if (d.pa.is_moving == TRUE)
-    {
-      animate_dungeon();
-      c = 0;
-      continue;
-    }
-    else
-    {
-      c = getkey();
-    }
-
     /* The message line should be cleared in any case. */
     clear_messages();
     
@@ -119,74 +101,54 @@ void play(void)
     opx = d.px;
     opy = d.py;
     
-    /* Act depending on the last key received. */
-    switch (c)
+    if (d.pa.is_moving == TRUE)
     {
-      case 'T':
-	adjust_training();
-	break;
+      animate_dungeon();
+    }
+    else
+    {
+      SDL_Event event;
 
-      case 'o':
-	open_door();
-	break;
+      while (SDL_PollEvent(&event))
+      {
+        /* TODO: Event driven input */
+      }
 
-      case '>':
-	descend_level();
-	break;
+      int input = get_input();
 
-      case '<':
-	ascend_level();
-	/* Quit if necessary. */
-	if (d.dl == -1)
-	  c = 'Q';
-	break;
+      if (input & PRESS_ESC)
+        quit = TRUE;
 
-      case 'R':
-	redraw();
-	break;
-
-      case 'J':
-	activate_walk_mode();
-	try(W);
-	break;
-	
-      case 'K':
-	activate_walk_mode();
-	try(S);
-	break;
-	
-      case 'L':
-	activate_walk_mode();
-	try(E);
-	break;
-	
-      case 'I':
-	activate_walk_mode();
-	try(N);
-	break;
-	
-      case 'j':
-	if (is_open(d.px - 1, d.py))
+      if (input & PRESS_LEFT)
+      {
+        set_dir_actor(&d.pa, LEFT);
+        if (is_open(d.px - 1, d.py))
           move_player(-1, 0);
-	break;
-	
-      case 'l':
-	if (is_open(d.px + 1, d.py))
+      }
+
+      if (input & PRESS_RIGHT)
+      {
+        set_dir_actor(&d.pa, RIGHT);
+        if (is_open(d.px + 1, d.py))
           move_player(1, 0);
-	break;
+      }
 
-      case 'i':
-	if (is_open(d.px, d.py - 1))
+      if (input & PRESS_UP)
+      {
+        set_dir_actor(&d.pa, UP);
+        if (is_open(d.px, d.py - 1))
           move_player(0, -1);
-	break;
+      }
 
-      case 'k':
-	if (is_open(d.px, d.py + 1))
+      if (input & PRESS_DOWN)
+      {
+        set_dir_actor(&d.pa, DOWN);
+        if (is_open(d.px, d.py + 1))
           move_player(0, 1);
-	break;
-	
-      default:
-	break;
+      }
+
+      if (input & PRESS_ENTER)
+        open_door();
     }
 
     d.opx = opx;
@@ -195,7 +157,7 @@ void play(void)
     /* Remove the player character from the screen. */
     print_tile(opx, opy);
   }
-  while (c != 'Q');
+  while (quit == FALSE);
 }
 
 

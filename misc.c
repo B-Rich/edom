@@ -148,30 +148,24 @@ void clear_messages(void)
 
 void get_target(coord xp, coord yp, coord *x, coord *y)
 {
-  char c;
-
   *x = xp;
   *y = yp;
   
-  message("Which direction? ");
-  c = getkey();
-  clear_messages();
-
-  switch (c)
+  switch(d.pa.dir)
   {
-    case 'i':
+    case UP:
       (*y)--;
       break;
       
-    case 'j':
+    case LEFT:
       (*x)--;
       break;
       
-    case 'k':
+    case DOWN:
       (*y)++;
       break;
       
-    case 'l':
+    case RIGHT:
       (*x)++;
       break;
 

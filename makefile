@@ -8,7 +8,7 @@
 # Object files.
 #
 
-OBJ = main.o actor.o dungeon.o sysdep.o error.o game.o misc.o monster.o player.o sprite.o map.o draw_map.o
+OBJ = main.o actor.o ctrl.o dungeon.o sysdep.o error.o game.o misc.o monster.o player.o sprite.o map.o draw_map.o
 
 #
 # Compiler stuff -- adjust to your system.
@@ -18,7 +18,7 @@ OBJ = main.o actor.o dungeon.o sysdep.o error.o game.o misc.o monster.o player.o
 
 CC     = gcc
 LFLAGS = -g -o edom -lncurses -lSDL -lSDL_image
-CFLAGS = -g -Wall -Dlinux -DSDL_GFX -I/usr/include/SDL
+CFLAGS = -g -Wall -Dlinux -DSDL_GFX -DSDL_CTRL -I/usr/include/SDL
 
 # DOS
 

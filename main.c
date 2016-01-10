@@ -110,15 +110,10 @@ int main(int argc, char **argv)
   stdprtstr("Setting up the game...");
   
   /* Initialize everything. */
-  stdprtstr(".");
   init_rand();
-  stdprtstr(".");
   init_player();
-  stdprtstr(".");
   init_monsters();
-  stdprtstr(".");
   init_dungeon(tile_base);
-  stdprtstr(".");
   init_io();
   
   /* Play the game. */
