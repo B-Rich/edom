@@ -642,6 +642,20 @@ void print_tile(coord x, coord y)
 
 
 
+static void puttile(int x, int y, int tile)
+{
+  /* Error check */
+  if (x >= 0 && x <= MAP_W && y >= 0 && y <= MAP_H)
+  {
+
+    /* Only change unrevield tiles */
+    if (gettile_map(tile_map, x, y) == TILE_UNKNOWN)
+    {
+        puttile_map(tile_map, x, y, start_tile + tile);
+    }
+  }
+}
+
 /*
  * Print the tile at position (x, y) to the current screen position.
  *
@@ -675,39 +689,39 @@ void print_tile_at_position(coord x, coord y)
     tile = map[x][y];
     if (tile == FLOOR)
     {
-      puttile_map(tile_map, x, y, start_tile + TILE_CLEAR);
+      puttile(x, y, TILE_CLEAR);
     }
     else if (tile == STAIR_DOWN)
     {
-      puttile_map(tile_map, x, y, start_tile + TILE_STAIR_D);
+      puttile(x, y, TILE_STAIR_D);
     }
     else if (tile == STAIR_UP)
     {
-      puttile_map(tile_map, x, y, start_tile + TILE_STAIR_U);
+      puttile(x, y, TILE_STAIR_U);
     }
     else if (tile == ROCK)
     {
       int above;
-      if (y-1 >= 0 && y-1 <= MAP_H && map[x][y-1] != FLOOR)
+      if (y-1 >= 0 && map[x][y-1] != FLOOR)
       {
         /* Test for special case, two vertical rocks */
-        if (map[x][y-2] == FLOOR && map[x][y+1] == FLOOR)
-          above = start_tile + TILE_TOP;
+        if (y-2 >= 0 && map[x][y-2] == FLOOR &&
+            y+1 <= MAP_H && map[x][y+1] == FLOOR)
+          above = TILE_TOP;
         else
-          above = start_tile + TILE_DENSE;
+          above = TILE_DENSE;
       }
       else
-        above = start_tile + TILE_TOP;
+        above = TILE_TOP;
 
-      if (y+1 >= 0 && y-1 <= MAP_H && map[x][y+1] == FLOOR)
+      if (y+1 <= MAP_H && map[x][y+1] == FLOOR)
       {
-        if (y-1 >= 0 && y-1 <= MAP_H)
-          puttile_map(tile_map, x, y-1, above);
-        puttile_map(tile_map, x, y, start_tile + TILE_BOTTOM);
+        puttile(x, y-1, above);
+        puttile(x, y, TILE_BOTTOM);
       }
       else
       {
-        puttile_map(tile_map, x, y, above);
+        puttile(x, y, above);
       }
     }
   }
