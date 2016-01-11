@@ -647,12 +647,7 @@ static void puttile(int x, int y, int tile)
   /* Error check */
   if (x >= 0 && x <= MAP_W && y >= 0 && y <= MAP_H)
   {
-
-    /* Only change unrevield tiles */
-    if (gettile_map(tile_map, x, y) == TILE_UNKNOWN)
-    {
-        puttile_map(tile_map, x, y, start_tile + tile);
-    }
+      puttile_map(tile_map, x, y, start_tile + tile);
   }
 }
 
