@@ -688,14 +688,15 @@ void print_tile_at_position(coord x, coord y)
     else if (tile == ROCK)
     {
       int above;
-      if (map[x][y-1] != FLOOR)
+      if (y-1 >= 0 && y-1 <= MAP_H && map[x][y-1] != FLOOR)
         above = start_tile + TILE_DENSE;
       else
         above = start_tile + TILE_TOP;
 
-      if (map[x][y+1] == FLOOR)
+      if (y+1 >= 0 && y-1 <= MAP_H && map[x][y+1] == FLOOR)
       {
-        puttile_map(tile_map, x, y-1, above);
+        if (y-1 >= 0 && y-1 <= MAP_H)
+          puttile_map(tile_map, x, y-1, above);
         puttile_map(tile_map, x, y, start_tile + TILE_BOTTOM);
       }
       else

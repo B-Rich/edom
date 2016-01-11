@@ -125,22 +125,19 @@ void play(void)
         if (is_open(d.px - 1, d.py))
           move_player(-1, 0);
       }
-
-      if (input & PRESS_RIGHT)
+      else if (input & PRESS_RIGHT)
       {
         set_dir_actor(&d.pa, RIGHT);
         if (is_open(d.px + 1, d.py))
           move_player(1, 0);
       }
-
-      if (input & PRESS_UP)
+      else if (input & PRESS_UP)
       {
         set_dir_actor(&d.pa, UP);
         if (is_open(d.px, d.py - 1))
           move_player(0, -1);
       }
-
-      if (input & PRESS_DOWN)
+      else if (input & PRESS_DOWN)
       {
         set_dir_actor(&d.pa, DOWN);
         if (is_open(d.px, d.py + 1))
