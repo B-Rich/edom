@@ -62,18 +62,16 @@ enum direction
 #define TILE_WIDTH   32
 #define TILE_HEIGHT  32
 
-#define TILE_UNKNOWN 1
-#define TILE_FLOOR   0
-#define TILE_ROCK    3
-#define TILE_WALL    2
-#define TILE_DOOR_OP 0
-#define TILE_DOOR_CL 4
-#define TILE_DOOR_LK 3
+#define TILE_UNKNOWN 0
+#define TILE_CLEAR   1
+#define TILE_DENSE   2
+#define TILE_BOTTOM  3
+#define TILE_TOP     4
 #define TILE_STAIR_D 5
 #define TILE_STAIR_U 6
 #define NUM_TILES    7
 
-#define TOTAL_NUM_TILES 32
+#define TOTAL_NUM_TILES 128
 
 /*
  * Global variables.

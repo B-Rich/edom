@@ -254,7 +254,7 @@ void dig_section(coord x, coord y)
 	  default:
 	    break;
 	}
-	d.s[d.dl][x][y].dt[dir] = rand_door();
+	d.s[d.dl][x][y].dt[dir] = FLOOR; /* No doors for now: rand_door();*/
       }
       else
 	d.s[d.dl][x][y].dt[dir] = NO_DOOR;
@@ -675,19 +675,7 @@ void print_tile_at_position(coord x, coord y)
     tile = map[x][y];
     if (tile == FLOOR)
     {
-      puttile_map(tile_map, x, y, start_tile + TILE_FLOOR);
-    }
-    else if (tile == OPEN_DOOR)
-    {
-      puttile_map(tile_map, x, y, start_tile + TILE_DOOR_OP);
-    }
-    else if (tile == CLOSED_DOOR)
-    {
-      puttile_map(tile_map, x, y, start_tile + TILE_DOOR_CL);
-    }
-    else if (tile == LOCKED_DOOR)
-    {
-      puttile_map(tile_map, x, y, start_tile + TILE_DOOR_LK);
+      puttile_map(tile_map, x, y, start_tile + TILE_CLEAR);
     }
     else if (tile == STAIR_DOWN)
     {
@@ -699,17 +687,20 @@ void print_tile_at_position(coord x, coord y)
     }
     else if (tile == ROCK)
     {
-      if (y+1 >= 0 && y+1 < MAP_H && map[x][y+1] != ROCK)
+      int above;
+      if (map[x][y-1] != FLOOR)
+        above = start_tile + TILE_DENSE;
+      else
+        above = start_tile + TILE_TOP;
+
+      if (map[x][y+1] == FLOOR)
       {
-        if (y-1 >= 0 && y-1 < MAP_H)
-        {
-          puttile_map(tile_map, x, y-1, start_tile + TILE_ROCK);
-        }
-        puttile_map(tile_map, x, y, start_tile + TILE_WALL);
+        puttile_map(tile_map, x, y-1, above);
+        puttile_map(tile_map, x, y, start_tile + TILE_BOTTOM);
       }
       else
       {
-        puttile_map(tile_map, x, y, start_tile + TILE_ROCK);
+        puttile_map(tile_map, x, y, above);
       }
     }
   }
