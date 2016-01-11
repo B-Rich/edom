@@ -689,7 +689,13 @@ void print_tile_at_position(coord x, coord y)
     {
       int above;
       if (y-1 >= 0 && y-1 <= MAP_H && map[x][y-1] != FLOOR)
-        above = start_tile + TILE_DENSE;
+      {
+        /* Test for special case, two vertical rocks */
+        if (map[x][y-2] == FLOOR && map[x][y+1] == FLOOR)
+          above = start_tile + TILE_TOP;
+        else
+          above = start_tile + TILE_DENSE;
+      }
       else
         above = start_tile + TILE_TOP;
 
