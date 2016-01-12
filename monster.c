@@ -273,6 +273,7 @@ void create_monster_in(byte midx)
   get_monster_coordinates(&m.m[d.dl][midx].x, &m.m[d.dl][midx].y);
   m.m[d.dl][midx].hp = m.m[d.dl][midx].max_hp = mhits(m.m[d.dl][midx].midx);
   m.m[d.dl][midx].state = ASLEEP;
+  init_actor(&m.m[d.dl][midx].a, "warrior.png", 31, 32, &common_anim);
 }
 
 
@@ -351,9 +352,8 @@ BOOL los(coord x, coord y)
 
 struct monster *get_monster_at(coord x, coord y)
 {
-  /* Paranoia. */
   if (midx[x][y] == -1)
-    die("No monster to retrieve");
+    return NULL;
 
   /* Return the requested monster. */
   return &m.m[d.dl][midx[x][y]];

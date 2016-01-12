@@ -23,6 +23,8 @@
 
 #define __MONSTER__
 
+#include "actor.h"
+
 /*
  * Constants for various monster states.
  */
@@ -64,6 +66,9 @@ struct monster
 
   /* The current state (see above). */
   byte state;
+
+  /* Monster actor*/
+  struct actor a;
 };
 
 

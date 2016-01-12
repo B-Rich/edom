@@ -114,10 +114,11 @@ struct dungeon_complex
 
 
 /* The global dungeon structure. */
-extern struct dungeon_complex d;
+struct dungeon_complex d;
 
-extern int screen_width;
-extern int screen_height;
+int screen_width;
+int screen_height;
+struct anim_info common_anim;
 
 void flip(void);
 

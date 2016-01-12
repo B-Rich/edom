@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "main.h"
 
-void init_actor(struct actor *a, const char *fn, int w, int h)
+void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim_info *info)
 {
   a->spr = load_sprite(fn, w, h);
   if (a->spr == NULL)
@@ -15,6 +15,8 @@ void init_actor(struct actor *a, const char *fn, int w, int h)
   a->base_frame = 0;
   a->delta_frame = 1;
   a->counter = 0;
+
+  memcpy(&a->anim_info, info, sizeof(struct anim_info));
 }
 
 void set_dir_actor(struct actor *a, enum facing dir)
@@ -24,19 +26,19 @@ void set_dir_actor(struct actor *a, enum facing dir)
   switch (dir)
   {
     case LEFT:
-      a->base_frame = ACTOR_FRAME_LEFT;
+      a->base_frame = a->anim_info.left;
       break;
 
     case RIGHT:
-      a->base_frame = ACTOR_FRAME_RIGHT;
+      a->base_frame = a->anim_info.right;
       break;
 
     case UP:
-      a->base_frame = ACTOR_FRAME_UP;
+      a->base_frame = a->anim_info.up;
       break;
 
     case DOWN:
-      a->base_frame = ACTOR_FRAME_DOWN;
+      a->base_frame = a->anim_info.down;
       break;
 
     default:
@@ -64,7 +66,7 @@ void animate_actor(struct actor *a)
 {
   if (a->is_moving == TRUE)
   {
-    if (++a->counter == ACTOR_ANIM_TRESHOLD)
+    if (++a->counter == a->anim_info.treshold)
     {
       if (++a->delta_frame == 2)
       {
@@ -76,7 +78,7 @@ void animate_actor(struct actor *a)
 
     if (a->dx)
     {
-      a->x += a->dx * ACTOR_SPEED;
+      a->x += a->dx * a->anim_info.speed;
       if ((a->x % TILE_WIDTH) == 0)
       {
         a->dx = 0;
@@ -87,7 +89,7 @@ void animate_actor(struct actor *a)
 
     if (a->dy)
     {
-      a->y += a->dy * ACTOR_SPEED;
+      a->y += a->dy * a->anim_info.speed;
       if ((a->y % TILE_HEIGHT) == 0)
       {
         a->dy = 0;

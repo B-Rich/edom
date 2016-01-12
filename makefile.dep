@@ -9,7 +9,7 @@ misc.o: misc.c main.h config.h dungeon.h sysdep.h error.h game.h \
 monster.o: monster.c main.h config.h dungeon.h sysdep.h error.h \
  game.h misc.h monster.h player.h
 player.o: player.c main.h config.h dungeon.h sysdep.h error.h game.h \
- misc.h monster.h player.h
+ misc.h monster.h actor.h player.h
 qdragon.o: qdragon.c main.h config.h dungeon.h sysdep.h error.h game.h \
  misc.h monster.h player.h
 sysdep.o: sysdep.c main.h config.h dungeon.h sysdep.h error.h game.h \

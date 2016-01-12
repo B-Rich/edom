@@ -61,7 +61,7 @@ void init_player(void)
 {
   byte i;
 
-  init_actor(&d.pa, "aron.png", 24, 32);
+  init_actor(&d.pa, "aron.png", 24, 32, &common_anim);
 
   /* Initial attributes. */
   for (i = 0; i < MAX_ATTRIBUTE; i++)

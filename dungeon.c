@@ -674,6 +674,10 @@ void print_tile_at_position(coord x, coord y)
 
       set_color(monster_color(m->midx));
       prtchar(monster_tile(m->midx));
+
+      /* Setup world coordinates for monster */
+      m->a.x = x * TILE_WIDTH;
+      m->a.y = y * TILE_HEIGHT;
     }
     else
     {
@@ -948,11 +952,6 @@ void set_knowledge(coord x, coord y, byte known)
     d.known[d.dl][x >> 3][y] &= (~(1 << (x % 8)));
 }
 
-void animate_dungeon(void)
-{
-  animate_actor(&d.pa);
-}
-
 void draw_dungeon(void)
 {
   int mw, mh;
@@ -982,5 +981,21 @@ void draw_dungeon(void)
 
   draw_map(0, 0, screen_width, screen_height, 1, tile_map,
            d.map_x, d.map_y, tiles);
+}
+
+void draw_monsters(void)
+{
+  coord x, y;
+  int sx = d.map_x / TILE_WIDTH;
+  int sy = d.map_y / TILE_HEIGHT;
+
+  for (y = 0; y < screen_height / TILE_HEIGHT; y++)
+    for (x = 0; x < screen_width / TILE_WIDTH; x++)
+      if (is_monster_at(sx + x, sy + y) && los(sx + x, sy + y))
+      {
+        struct monster *m = get_monster_at(sx + x, sy + y);
+        if (m)
+            draw_actor(&m->a);
+      }
 }
 

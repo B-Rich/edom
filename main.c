@@ -40,8 +40,16 @@
 
 
 static SDL_Surface *screen;
+
 int screen_width = 640;
 int screen_height = 480;
+
+struct anim_info common_anim =
+{
+  3, 6, 9, 0,
+  2,
+  4
+};
 
 /*
  * Local prototypes.

@@ -4,17 +4,16 @@
 #include "sysdep.h"
 #include "sprite.h"
 
-#define ACTOR_ANIM_TRESHOLD 4
-#define ACTOR_SPEED         2
-
-#define ACTOR_FRAME_DOWN  0
-#define ACTOR_FRAME_LEFT  3
-#define ACTOR_FRAME_RIGHT 6
-#define ACTOR_FRAME_UP    9
-
 enum facing
 {
   LEFT, RIGHT, UP, DOWN
+};
+
+struct anim_info
+{
+  int left, right, up, down;
+  int speed;
+  int treshold;
 };
 
 struct actor
@@ -31,6 +30,10 @@ struct actor
   /* Set while player is moving from one tile to another */
   BOOL is_moving;
 
+  /* Animation information */
+  struct anim_info anim_info;
+
+  /* Animation idle counter */
   int counter;
 
   /* Actor sprite frame */
@@ -41,7 +44,7 @@ struct actor
   SPRITE *spr;
 };
 
-void init_actor(struct actor *a, const char *fn, int w, int h);
+void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim_info *info);
 void set_dir_actor(struct actor *a, enum facing dir);
 void move_actor(struct actor *a, byte dx, byte dy);
 void animate_actor(struct actor *a);
