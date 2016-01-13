@@ -47,6 +47,17 @@ void set_dir_actor(struct actor *a, enum facing dir)
   }
 }
 
+void animate_actor(struct actor *a)
+{
+  if (++a->counter == a->anim_info.treshold)
+  {
+    if (++a->delta_frame == 2)
+      a->delta_frame = 0;
+
+    a->counter = 0;
+  }
+}
+
 void move_actor(struct actor *a, byte dx, byte dy)
 {
   if (dx)
@@ -62,19 +73,11 @@ void move_actor(struct actor *a, byte dx, byte dy)
   }
 }
 
-void animate_actor(struct actor *a)
+void animate_move_actor(struct actor *a)
 {
   if (a->is_moving == TRUE)
   {
-    if (++a->counter == a->anim_info.treshold)
-    {
-      if (++a->delta_frame == 2)
-      {
-        a->delta_frame = 0;
-      }
-
-      a->counter = 0;
-    }
+    animate_actor(a);
 
     if (a->dx)
     {

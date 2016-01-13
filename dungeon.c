@@ -995,7 +995,10 @@ void draw_monsters(void)
       {
         struct monster *m = get_monster_at(sx + x, sy + y);
         if (m)
+        {
+            animate_actor(&m->a);
             draw_actor(&m->a);
+        }
       }
 }
 

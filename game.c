@@ -101,7 +101,11 @@ void play(void)
     opx = d.px;
     opy = d.py;
     
-    if (d.pa.is_moving != TRUE)
+    if (d.pa.is_moving == TRUE)
+    {
+      animate_move_actor(&d.pa);
+    }
+    else
     {
       SDL_Event event;
 
@@ -196,7 +200,6 @@ void update_screen(coord x, coord y)
   if (sx != -1 && sy != -1)
     know_section(sx, sy);
 
-  animate_actor(&d.pa);
   draw_dungeon();
   draw_monsters();
   draw_actor(&d.pa);

@@ -263,17 +263,38 @@ byte random_monster_type(void)
 
 void create_monster_in(byte midx)
 {
+  byte type;
+
+  type = random_monster_type();
+  switch(type)
+  {
+    case 0:
+      init_actor(&m.m[d.dl][midx].a, "hydra.png", 24, 28, &common_anim);
+      break;
+
+    case 1:
+      init_actor(&m.m[d.dl][midx].a, "gargoyle.png", 24, 32, &common_anim);
+      break;
+
+    case 2:
+      init_actor(&m.m[d.dl][midx].a, "reaper.png", 32, 32, &common_anim);
+      break;
+
+    default:
+      init_actor(&m.m[d.dl][midx].a, "warrior.png", 31, 32, &common_anim);
+      break;
+  }
+
   /* Adjust the 'empty' index. */
   if (m.eidx[d.dl] == midx)
     m.eidx[d.dl] = m.m[d.dl][midx].midx; 
 
   /* Create the actual monster. */
   m.m[d.dl][midx].used = TRUE;
-  m.m[d.dl][midx].midx = random_monster_type();
+  m.m[d.dl][midx].midx = type;
   get_monster_coordinates(&m.m[d.dl][midx].x, &m.m[d.dl][midx].y);
   m.m[d.dl][midx].hp = m.m[d.dl][midx].max_hp = mhits(m.m[d.dl][midx].midx);
   m.m[d.dl][midx].state = ASLEEP;
-  init_actor(&m.m[d.dl][midx].a, "warrior.png", 31, 32, &common_anim);
 }
 
 
