@@ -140,7 +140,9 @@ void initialize_monsters(void);
 void build_monster_map(void);
 void create_monster_in(byte);
 void create_population(void);
+void move_monster(struct monster *m, byte dx, byte dy);
 void move_monsters(void);
+void draw_monsters(void);
 
 #endif
 

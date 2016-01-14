@@ -143,4 +143,8 @@
 /* The number of training units you can distribute. */
 #define TUNITS 100
 
+/* Size of graphical tiles */
+#define TILE_WIDTH   32
+#define TILE_HEIGHT  32
+
 #endif

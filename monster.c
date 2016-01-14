@@ -295,6 +295,10 @@ void create_monster_in(byte midx)
   get_monster_coordinates(&m.m[d.dl][midx].x, &m.m[d.dl][midx].y);
   m.m[d.dl][midx].hp = m.m[d.dl][midx].max_hp = mhits(m.m[d.dl][midx].midx);
   m.m[d.dl][midx].state = ASLEEP;
+
+  /* Fill in in actor field */
+  m.m[d.dl][midx].a.x = m.m[d.dl][midx].x * TILE_WIDTH;
+  m.m[d.dl][midx].a.y = m.m[d.dl][midx].y * TILE_HEIGHT;
 }
 
 
@@ -373,8 +377,9 @@ BOOL los(coord x, coord y)
 
 struct monster *get_monster_at(coord x, coord y)
 {
+  /* Paranoia. */
   if (midx[x][y] == -1)
-    return NULL;
+    die("No monster to retrieve");
 
   /* Return the requested monster. */
   return &m.m[d.dl][midx[x][y]];
@@ -415,10 +420,105 @@ BOOL is_monster_at(coord x, coord y)
 
 
 
+void move_monster(struct monster *m, byte dx, byte dy)
+{
+  byte i;
+
+  if (m->a.is_moving == FALSE)
+  {
+    /* Store mondest index in slot at current position */
+    i = midx[m->x][m->y];
+
+    /* Clear slot */
+    midx[m->x][m->y] = -1;
+
+    /* Update monster position */
+    m->x += dx;
+    m->y += dy;
+
+    /* Set index in slot at new position */
+    midx[m->x][m->y] = i;
+
+    move_actor(&m->a, dx, dy);
+  }
+}
+
+
 /*
  * Handle the monster turn: movement, combat, etc.
  */
 
 void move_monsters(void)
 {
+  coord x, y;
+  int sx = d.map_x / TILE_WIDTH;
+  int sy = d.map_y / TILE_HEIGHT;
+
+  for (y = 0; y < screen_height / TILE_HEIGHT; y++)
+    for (x = 0; x < screen_width / TILE_WIDTH; x++)
+      if (is_monster_at(sx + x, sy + y) && los(sx + x, sy + y))
+      {
+        struct monster *mi = get_monster_at(sx + x, sy + y);
+
+        if (mi->a.is_moving == TRUE)
+          animate_move_actor(&mi->a);
+        else
+        {
+          int dx = 0;
+          int dy = 0;
+
+          if (d.px < mi->x &&
+              is_floor(mi->x - 1, mi->y) &&
+              !is_monster_at(mi->x - 1, mi->y) &&
+              !(mi->x - 1 == d.px && mi->y == d.py))
+          {
+            set_dir_actor(&mi->a, LEFT);
+            dx = -1;
+          }
+          else if (d.px > mi->x &&
+                   is_floor(mi->x + 1, mi->y) &&
+                   !is_monster_at(mi->x + 1, mi->y) &&
+                   !(mi->x + 1 == d.px && mi->y == d.py))
+          {
+            set_dir_actor(&mi->a, RIGHT);
+            dx = 1;
+          }
+          else if (d.py < mi->y &&
+                   is_floor(mi->x, mi->y - 1) &&
+                   !is_monster_at(mi->x, mi->y - 1) &&
+                   !(mi->x == d.px && mi->y - 1 == d.py))
+          {
+            set_dir_actor(&mi->a, UP);
+            dy = -1;
+          }
+          else if (d.py > mi->y &&
+                   is_floor(mi->x, mi->y + 1) &&
+                   !is_monster_at(mi->x, mi->y + 1) &&
+                   !(mi->x == d.px && mi->y + 1 == d.py))
+          {
+            set_dir_actor(&mi->a, DOWN);
+            dy = 1;
+          }
+
+          move_monster(mi, dx, dy);
+        }
+      }
+}
+
+
+
+void draw_monsters(void)
+{
+  coord x, y;
+  int sx = d.map_x / TILE_WIDTH;
+  int sy = d.map_y / TILE_HEIGHT;
+
+  for (y = 0; y < screen_height / TILE_HEIGHT; y++)
+    for (x = 0; x < screen_width / TILE_WIDTH; x++)
+      if (is_monster_at(sx + x, sy + y) && los(sx + x, sy + y))
+      {
+        struct monster *m = get_monster_at(sx + x, sy + y);
+
+        draw_actor(&m->a);
+      }
 }

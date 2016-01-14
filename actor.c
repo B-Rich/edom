@@ -12,6 +12,10 @@ void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim
     exit(1);
   }
 
+  a->is_moving = FALSE;
+  a->dx = 0;
+  a->dy = 0;
+
   a->base_frame = 0;
   a->delta_frame = 1;
   a->counter = 0;

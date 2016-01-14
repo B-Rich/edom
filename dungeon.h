@@ -59,9 +59,6 @@ enum direction
  * Graphical tiles for map
  */
 
-#define TILE_WIDTH   32
-#define TILE_HEIGHT  32
-
 #define TILE_UNKNOWN 0
 #define TILE_CLEAR   1
 #define TILE_DENSE   2
@@ -107,9 +104,10 @@ void map_cursor(coord, coord);
 void print_tile(coord, coord);
 void print_tile_at_position(coord, coord);
 void change_door(coord, coord, byte);
+BOOL is_floor(coord x, coord y);
 void set_knowledge(coord, coord, byte);
+void move_dungeon(void);
 void draw_dungeon(void);
-void draw_monsters(void);
 
 #endif
 

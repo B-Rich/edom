@@ -100,9 +100,10 @@ void play(void)
     /* Memorize the old PC position. */
     opx = d.px;
     opy = d.py;
-    
+
     if (d.pa.is_moving == TRUE)
     {
+      move_monsters();
       animate_move_actor(&d.pa);
     }
     else
@@ -122,25 +123,29 @@ void play(void)
       if (input & PRESS_LEFT)
       {
         set_dir_actor(&d.pa, LEFT);
-        if (is_open(d.px - 1, d.py))
+        if (is_open(d.px - 1, d.py) &&
+            !is_monster_at(d.px - 1, d.py))
           move_player(-1, 0);
       }
       else if (input & PRESS_RIGHT)
       {
         set_dir_actor(&d.pa, RIGHT);
-        if (is_open(d.px + 1, d.py))
+        if (is_open(d.px + 1, d.py) &&
+            !is_monster_at(d.px + 1, d.py))
           move_player(1, 0);
       }
       else if (input & PRESS_UP)
       {
         set_dir_actor(&d.pa, UP);
-        if (is_open(d.px, d.py - 1))
+        if (is_open(d.px, d.py - 1) &&
+            !is_monster_at(d.px, d.py - 1))
           move_player(0, -1);
       }
       else if (input & PRESS_DOWN)
       {
         set_dir_actor(&d.pa, DOWN);
-        if (is_open(d.px, d.py + 1))
+        if (is_open(d.px, d.py + 1) &&
+            !is_monster_at(d.px, d.py + 1))
           move_player(0, 1);
       }
 
@@ -200,6 +205,7 @@ void update_screen(coord x, coord y)
   if (sx != -1 && sy != -1)
     know_section(sx, sy);
 
+  move_dungeon();
   draw_dungeon();
   draw_monsters();
   draw_actor(&d.pa);
