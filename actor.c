@@ -77,19 +77,32 @@ void animate_actor(struct actor *a)
   }
 }
 
-void move_actor(struct actor *a, byte dx, byte dy)
+void move_actor(struct actor *a, enum facing dir)
 {
-  if (dx)
+  switch(dir)
   {
-    a->dx = dx;
-    a->is_moving = TRUE;
+    case DOWN:
+      a->dx = 0;
+      a->dy = 1;
+      break;
+
+    case LEFT:
+      a->dx = -1;
+      a->dy = 0;
+      break;
+
+    case RIGHT:
+      a->dx = 1;
+      a->dy = 0;
+      break;
+
+    case UP:
+      a->dx = 0;
+      a->dy = -1;
+      break;
   }
 
-  if (dy)
-  {
-    a->dy = dy;
-    a->is_moving = TRUE;
-  }
+  a->is_moving = TRUE;
 }
 
 void animate_move_actor(struct actor *a)

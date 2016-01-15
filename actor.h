@@ -49,7 +49,7 @@ struct actor
 void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim_info *info);
 void set_dir_actor(struct actor *a, enum facing dir);
 void animate_actor(struct actor *a);
-void move_actor(struct actor *a, byte dx, byte dy);
+void move_actor(struct actor *a, enum facing dir);
 void animate_move_actor(struct actor *a);
 void draw_actor(struct actor *a);
 

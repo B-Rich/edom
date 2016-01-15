@@ -126,28 +126,28 @@ void play(void)
         set_dir_actor(&d.pa, LEFT);
         if (is_open(d.px - 1, d.py) &&
             !is_monster_at(d.px - 1, d.py))
-          move_player(-1, 0);
+          move_player(LEFT);
       }
       else if (input & PRESS_RIGHT)
       {
         set_dir_actor(&d.pa, RIGHT);
         if (is_open(d.px + 1, d.py) &&
             !is_monster_at(d.px + 1, d.py))
-          move_player(1, 0);
+          move_player(RIGHT);
       }
       else if (input & PRESS_UP)
       {
         set_dir_actor(&d.pa, UP);
         if (is_open(d.px, d.py - 1) &&
             !is_monster_at(d.px, d.py - 1))
-          move_player(0, -1);
+          move_player(UP);
       }
       else if (input & PRESS_DOWN)
       {
         set_dir_actor(&d.pa, DOWN);
         if (is_open(d.px, d.py + 1) &&
             !is_monster_at(d.px, d.py + 1))
-          move_player(0, 1);
+          move_player(DOWN);
       }
 
       if (input & PRESS_ENTER)
@@ -309,6 +309,7 @@ void try(byte dir)
    * Walk.  This function also manages to walk around corners in a tunnel.
    */
 
+#if 0
   switch (dir)
   {
     case N:
@@ -358,6 +359,7 @@ void try(byte dir)
     default:
       break;
   }
+#endif
 
   /* Find the new section. */
   get_current_section(d.px, d.py, &sx2, &sy2);
@@ -518,7 +520,7 @@ void attack(void)
     return;
 
   if (is_monster_at(tx, ty))
-    /* TODO: Really fight */ remove_monster_at(tx, ty);
+    attack_monster_at(tx, ty);
 }
 
 

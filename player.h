@@ -112,7 +112,7 @@ void adjust_training(void);
 void score_exp(int32);
 
 void place_player(byte px, byte py);
-void move_player(byte dx, byte dy);
+void move_player(enum facing dir);
 void animate_player(void);
 void draw_player(void);
 

@@ -356,7 +356,7 @@ BOOL los(coord x, coord y)
   coord sx, sy, psx, psy;
 
   /* Adjacent to the PC? */
-  if (iabs(x - d.px) <= 1 && iabs(y - d.py) <= 1)
+  if (abs(x - d.px) <= 1 && abs(y - d.py) <= 1)
     return TRUE;
 
   /* Get the section for the given position. */
@@ -383,6 +383,24 @@ struct monster *get_monster_at(coord x, coord y)
 
   /* Return the requested monster. */
   return &m.m[d.dl][midx[x][y]];
+}
+
+
+
+void attack_monster_at(coord x, coord y)
+{
+  struct monster *m = get_monster_at(x, y);
+
+  m->state = ANGRY;
+}
+
+
+
+void remove_monster_at(coord x, coord y)
+{
+  m.m[d.dl][midx[x][y]].midx = -1;
+  m.m[d.dl][midx[x][y]].used = FALSE;
+  midx[x][y] = -1;
 }
 
 
@@ -420,21 +438,53 @@ BOOL is_monster_at(coord x, coord y)
 
 
 
-void remove_monster_at(coord x, coord y)
+static BOOL is_clear(struct monster *m, enum facing dir)
 {
-  m.m[d.dl][midx[x][y]].midx = -1;
-  m.m[d.dl][midx[x][y]].used = FALSE;
-  midx[x][y] = -1;
+  BOOL result = FALSE;
+
+  switch(dir)
+  {
+    case DOWN:
+      if (is_floor(m->x, m->y + 1) &&
+          !is_monster_at(m->x, m->y + 1) &&
+          !(m->x == d.px && m->y + 1 == d.py))
+        result = TRUE;
+      break;
+
+    case LEFT:
+      if (is_floor(m->x - 1, m->y) &&
+          !is_monster_at(m->x - 1, m->y) &&
+          !(m->x - 1 == d.px && m->y == d.py))
+        result = TRUE;
+      break;
+
+    case RIGHT:
+        if (is_floor(m->x + 1, m->y) &&
+            !is_monster_at(m->x + 1, m->y) &&
+            !(m->x + 1 == d.px && m->y == d.py))
+        result = TRUE;
+      break;
+
+    case UP:
+      if (is_floor(m->x, m->y - 1) &&
+          !is_monster_at(m->x, m->y - 1) &&
+          !(m->x == d.px && m->y - 1 == d.py))
+        result = TRUE;
+      break;
+  }
+
+  return result;
 }
 
-
-
-void move_monster(struct monster *m, byte dx, byte dy)
+void move_monster(struct monster *m, enum facing dir)
 {
   byte i;
 
   if (m->a.is_moving == FALSE)
   {
+    set_dir_actor(&m->a, dir);
+    move_actor(&m->a, dir);
+
     /* Store mondest index in slot at current position */
     i = midx[m->x][m->y];
 
@@ -442,13 +492,11 @@ void move_monster(struct monster *m, byte dx, byte dy)
     midx[m->x][m->y] = -1;
 
     /* Update monster position */
-    m->x += dx;
-    m->y += dy;
+    m->x += m->a.dx;
+    m->y += m->a.dy;
 
     /* Set index in slot at new position */
     midx[m->x][m->y] = i;
-
-    move_actor(&m->a, dx, dy);
   }
 }
 
@@ -473,43 +521,28 @@ void move_monsters(void)
           animate_move_actor(&mi->a);
         else
         {
-          int dx = 0;
-          int dy = 0;
-
-          if (d.px < mi->x &&
-              is_floor(mi->x - 1, mi->y) &&
-              !is_monster_at(mi->x - 1, mi->y) &&
-              !(mi->x - 1 == d.px && mi->y == d.py))
+          if (mi->state == ASLEEP)
           {
-            set_dir_actor(&mi->a, LEFT);
-            dx = -1;
+            if (abs(mi->x - d.px) <= 2 && abs(mi->y - d.py) <= 2)
+              mi->state = NEUTRAL;
           }
-          else if (d.px > mi->x &&
-                   is_floor(mi->x + 1, mi->y) &&
-                   !is_monster_at(mi->x + 1, mi->y) &&
-                   !(mi->x + 1 == d.px && mi->y == d.py))
+          else if (mi->state == NEUTRAL)
           {
-            set_dir_actor(&mi->a, RIGHT);
-            dx = 1;
+            enum facing dir = rand_long(4);
+            if (is_clear(mi, dir))
+              move_monster(mi, dir);
           }
-          else if (d.py < mi->y &&
-                   is_floor(mi->x, mi->y - 1) &&
-                   !is_monster_at(mi->x, mi->y - 1) &&
-                   !(mi->x == d.px && mi->y - 1 == d.py))
+          else if (mi->state == ANGRY)
           {
-            set_dir_actor(&mi->a, UP);
-            dy = -1;
+            if (d.px < mi->x && is_clear(mi, LEFT))
+              move_monster(mi, LEFT);
+            else if (d.px > mi->x && is_clear(mi, RIGHT))
+              move_monster(mi, RIGHT);
+            else if (d.py < mi->y && is_clear(mi, UP))
+              move_monster(mi, UP);
+            else if (d.py > mi->y && is_clear(mi, DOWN))
+              move_monster(mi, DOWN);
           }
-          else if (d.py > mi->y &&
-                   is_floor(mi->x, mi->y + 1) &&
-                   !is_monster_at(mi->x, mi->y + 1) &&
-                   !(mi->x == d.px && mi->y + 1 == d.py))
-          {
-            set_dir_actor(&mi->a, DOWN);
-            dy = 1;
-          }
-
-          move_monster(mi, dx, dy);
         }
       }
 }

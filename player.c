@@ -472,13 +472,13 @@ void place_player(byte px, byte py)
   d.pa.dy = 0;
 }
 
-void move_player(byte dx, byte dy)
+void move_player(enum facing dir)
 {
   if (d.pa.is_moving == FALSE)
   {
-    d.px += dx;
-    d.py += dy;
-    move_actor(&d.pa, dx, dy);
+    move_actor(&d.pa, dir);
+    d.px += d.pa.dx;
+    d.py += d.pa.dy;
   }
 }
 

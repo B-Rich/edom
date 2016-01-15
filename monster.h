@@ -129,19 +129,20 @@ extern struct monster_struct m;
 
 BOOL los(coord, coord);
 BOOL is_monster_at(coord, coord);
-void remove_monster_at(coord, coord);
 
 byte monster_tile(byte);
 byte monster_color(byte);
 
 struct monster *get_monster_at(coord, coord);
+void attack_monster_at(coord, coord);
+void remove_monster_at(coord, coord);
 
 void init_monsters(void);
 void initialize_monsters(void);
 void build_monster_map(void);
 void create_monster_in(byte);
 void create_population(void);
-void move_monster(struct monster *m, byte dx, byte dy);
+void move_monster(struct monster *m, enum facing dir);
 void move_monsters(void);
 void draw_monsters(void);
 
