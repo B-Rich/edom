@@ -129,6 +129,7 @@ extern struct monster_struct m;
 
 BOOL los(coord, coord);
 BOOL is_monster_at(coord, coord);
+void remove_monster_at(coord, coord);
 
 byte monster_tile(byte);
 byte monster_color(byte);

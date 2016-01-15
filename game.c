@@ -42,6 +42,7 @@ void try(byte);
 void descend_level(void);
 void ascend_level(void);
 void open_door(void);
+void attack(void);
 void activate_walk_mode(void);
 
 
@@ -151,6 +152,9 @@ void play(void)
 
       if (input & PRESS_ENTER)
         open_door();
+
+      if (input & PRESS_FIRE)
+        attack();
     }
 
     d.opx = opx;
@@ -499,6 +503,24 @@ void open_door(void)
       break;
   }
 }
+
+
+
+void attack(void)
+{
+  coord tx, ty;
+
+  /* Find the monster. */
+  get_target(d.px, d.py, &tx, &ty);
+
+  /* Command aborted? */
+  if (tx == -1 || ty == -1)
+    return;
+
+  if (is_monster_at(tx, ty))
+    /* TODO: Really fight */ remove_monster_at(tx, ty);
+}
+
 
 
 /*

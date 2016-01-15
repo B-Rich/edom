@@ -420,6 +420,15 @@ BOOL is_monster_at(coord x, coord y)
 
 
 
+void remove_monster_at(coord x, coord y)
+{
+  m.m[d.dl][midx[x][y]].midx = -1;
+  m.m[d.dl][midx[x][y]].used = FALSE;
+  midx[x][y] = -1;
+}
+
+
+
 void move_monster(struct monster *m, byte dx, byte dy)
 {
   byte i;
