@@ -47,8 +47,9 @@ int screen_height = 480;
 struct anim_info common_anim =
 {
   3, 6, 9, 0,
+  3,
   2,
-  4
+  3
 };
 
 /*

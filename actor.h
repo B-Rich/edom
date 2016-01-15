@@ -12,6 +12,7 @@ enum facing
 struct anim_info
 {
   int left, right, up, down;
+  int num_walk_frames;
   int speed;
   int treshold;
 };
@@ -39,6 +40,7 @@ struct actor
   /* Actor sprite frame */
   int base_frame;
   int delta_frame;
+  BOOL rev_anim;
 
   /* Actor sprite */
   SPRITE *spr;

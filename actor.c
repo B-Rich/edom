@@ -18,6 +18,7 @@ void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim
 
   a->base_frame = 0;
   a->delta_frame = 1;
+  a->rev_anim = FALSE;
   a->counter = 0;
 
   memcpy(&a->anim_info, info, sizeof(struct anim_info));
@@ -55,8 +56,22 @@ void animate_actor(struct actor *a)
 {
   if (++a->counter == a->anim_info.treshold)
   {
-    if (++a->delta_frame == 2)
-      a->delta_frame = 0;
+    if (!a->rev_anim)
+    {
+      if (++a->delta_frame > a->anim_info.num_walk_frames - 1)
+      {
+        a->delta_frame = a->anim_info.num_walk_frames - 1;
+        a->rev_anim = TRUE;
+      }
+    }
+    else
+    {
+      if (--a->delta_frame < 0)
+      {
+        a->delta_frame = 0;
+        a->rev_anim = FALSE;
+      }
+    }
 
     a->counter = 0;
   }
