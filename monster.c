@@ -281,7 +281,7 @@ void create_monster_in(byte midx)
       break;
 
     default:
-      init_actor(&m.m[d.dl][midx].a, "warrior.png", 31, 32, &common_anim);
+      init_actor(&m.m[d.dl][midx].a, "samurai.png", 31, 32, &common_anim);
       break;
   }
 
