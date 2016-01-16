@@ -47,6 +47,22 @@ void activate_walk_mode(void);
 
 
 /*
+ * Event driven input
+ */
+
+static void game_keydown(int key)
+{
+  int input = get_input_keydown(key);
+
+  if (input & PRESS_ENTER)
+    open_door();
+
+  if (input & PRESS_FIRE)
+    attack();
+}
+
+
+/*
  * The main function.
  */
 
@@ -101,7 +117,11 @@ void play(void)
 
       while (SDL_PollEvent(&event))
       {
-        /* TODO: Event driven input */
+        if (event.type == SDL_QUIT)
+          quit = TRUE;
+
+        if (event.type == SDL_KEYDOWN)
+          game_keydown(event.key.keysym.sym);
       }
 
       int input = get_input();
@@ -137,19 +157,10 @@ void play(void)
             !is_monster_at(d.px, d.py + 1))
           move_player(DOWN);
       }
-
-      if (input & PRESS_ENTER)
-        open_door();
-
-      if (input & PRESS_FIRE)
-        attack();
     }
 
     d.opx = opx;
     d.opy = opy;
-
-    /* Remove the player character from the screen. */
-    paint_tile(opx, opy);
   }
   while (quit == FALSE);
 }
