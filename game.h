@@ -35,7 +35,7 @@
  * Global functions.
  */
 
-void play(void);
+void play(int start_level);
 void modify_dungeon_level(byte);
 void redraw(void);
 

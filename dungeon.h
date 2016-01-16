@@ -92,7 +92,7 @@ BOOL is_known(coord, coord);
 
 char tile_at(coord, coord);
 
-void init_dungeon(int tile_base);
+void init_dungeon(void);
 void build_map(void);
 void paint_map(void);
 void know(coord, coord);

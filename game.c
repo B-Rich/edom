@@ -72,7 +72,7 @@ static void game_keydown(int key)
  * The main function.
  */
 
-void play(void)
+void play(int start_level)
 {
   coord opx, opy;
   BOOL quit = 0;
@@ -83,14 +83,14 @@ void play(void)
    * XXXX: Once it is possible to save/restore the map this no longer
    *       must be done if the game was started by restoring a save file.
    */
-  d.dl = 0;
+  d.dl = start_level;
   build_map();
   create_population();
   build_monster_map();
   d.visited[0] = TRUE;
   
   /* Initial player position. */
-  place_player(d.stxu[0], d.styu[0]);
+  place_player(d.stxu[d.dl], d.styu[d.dl]);
 
   /* Initial panel position. */
   d.psx = d.psy = 0;
@@ -440,12 +440,11 @@ void modify_dungeon_level(byte mod)
 void descend_level(void)
 {
   if (tile_at(d.px, d.py) != STAIR_DOWN)
-    you("don't see any stairs leading downwards.");
+    you("don't see any gateway leading forward.");
   else
   {
     modify_dungeon_level(+1);
-    d.px = d.stxu[d.dl];
-    d.py = d.styu[d.dl];
+    place_player(d.stxu[d.dl], d.styu[d.dl]);
   }
 }
 
@@ -458,14 +457,13 @@ void descend_level(void)
 void ascend_level(void)
 {
   if (tile_at(d.px, d.py) != STAIR_UP)
-    you("don't see any stairs leading upwards.");
+    you("don't see any gateway leading back.");
   else
   {
     if (d.dl)
     {
       modify_dungeon_level(-1);
-      d.px = d.stxd[d.dl];
-      d.py = d.styd[d.dl];
+      place_player(d.stxu[d.dl], d.styu[d.dl]);
     }
     else
       /* Leave the dungeon. */

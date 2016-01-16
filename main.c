@@ -112,7 +112,7 @@ void flip(void)
 
 int main(int argc, char **argv)
 {
-  int tile_base = 0;
+  int start_level = 0;
 
   /* Print startup message. */
   printf("Current dungeon size: %ld.\n"
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
   printf("\n");
   
   if (argc > 1)
-    tile_base = atoi(argv[1]);
+    start_level = atoi(argv[1]);
   
   if (!init())
     return 1;
@@ -133,10 +133,10 @@ int main(int argc, char **argv)
   init_rand();
   init_player();
   init_monsters();
-  init_dungeon(tile_base);
+  init_dungeon();
   
   /* Play the game. */
-  play();
+  play(start_level);
 
   /* Be done. */
   return 0;

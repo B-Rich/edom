@@ -68,11 +68,9 @@ BOOL dir_possible(coord, coord, byte);
  * map.
  */
 
-void init_dungeon(int tile_base)
+void init_dungeon(void)
 {
   create_complete_dungeon();
-
-  start_tile = tile_base * NUM_TILES;
 
   tiles = load_sprite("tiles.png", TILE_WIDTH, TILE_HEIGHT);
   if (tiles == NULL) {
@@ -83,8 +81,6 @@ void init_dungeon(int tile_base)
   if (tile_map == NULL) {
     exit(1);
   }
-
-  clear_map(tile_map, start_tile + TILE_UNKNOWN);
 }
 
 
@@ -363,6 +359,9 @@ void build_map(void)
   map[d.stxu[d.dl]][d.styu[d.dl]] = STAIR_UP;
   if (d.dl < MAX_DUNGEON_LEVEL - 1)
     map[d.stxd[d.dl]][d.styd[d.dl]] = STAIR_DOWN;
+
+  start_tile = d.dl * NUM_TILES;
+  clear_map(tile_map, start_tile + TILE_UNKNOWN);
 }
 
 
