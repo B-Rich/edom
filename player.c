@@ -127,10 +127,10 @@ byte get_attribute(byte attribute)
 
 void update_player_status(void)
 {
+#if 0
   if (update_necessary)
   {
     cursor(0, 24);
-    set_color(C_LIGHT_GRAY);
     prtstr("%s   St:%d  In:%d  Dx:%d  To:%d  Ma:%d  H:%d(%d)  P:%d(%d)  X:%ld"
 	   , d.pc.name
 	   , (int) d.pc.attribute[STRENGTH]
@@ -147,6 +147,7 @@ void update_player_status(void)
     
     update_necessary = FALSE;
   }
+#endif
 }
 
 
@@ -158,6 +159,7 @@ void update_player_status(void)
 
 void adjust_training(void)
 {
+#if 0
   char c;
   byte i, length, exp_length, unit_length, training_length;
   int16 remaining_units;
@@ -193,8 +195,6 @@ void adjust_training(void)
     /* Draw the menu. */
     if (do_redraw)
     {
-      set_color(C_LIGHT_GRAY);
-      
       training_length = 0;
       for (i = 0; i < MAX_T_SKILL; i++)
 	training_length = imax(training_length
@@ -298,6 +298,7 @@ void adjust_training(void)
 
   /* Clean up. */
   redraw();
+#endif
 }
 
 

@@ -79,11 +79,11 @@ struct monster
 
 struct monster_def
 {
-  /* The character symbol. */
-  char symbol;
+  /* Image filename */
+  char *filename;
 
-  /* The color of the monster. */
-  byte color;
+  /* Image size */
+  byte w, h;
 
   /* It's name. */
   char *name;
@@ -129,9 +129,6 @@ extern struct monster_struct m;
 
 BOOL los(coord, coord);
 BOOL is_monster_at(coord, coord);
-
-byte monster_tile(byte);
-byte monster_color(byte);
 
 struct monster *get_monster_at(coord, coord);
 void attack_monster_at(coord, coord);

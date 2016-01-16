@@ -72,20 +72,6 @@ typedef byte           coord;
 
 
 /*
- * Color constants.
- */
-
-
-enum color_types
-{
-  C_BLACK, C_BLUE, C_GREEN, C_CYAN, C_RED, C_MAGENTA,
-  C_BROWN, C_LIGHT_GRAY, C_DARK_GRAY, C_LIGHT_BLUE,
-  C_LIGHT_GREEN, C_LIGHT_CYAN, C_LIGHT_RED, C_LIGHT_MAGENTA,
-  C_YELLOW, C_WHITE, MAX_COLOR
-};
-
-
-/*
  * Global functions.
  */
 
@@ -93,18 +79,6 @@ byte rand_byte(byte);
 uint16 rand_int(uint16);
 uint32 rand_long(uint32);
 
-char getkey(void);
-
 void init_rand(void);
-void init_io();
-void clean_up_io();
-void clear_screen();
-void cursor(byte, byte);
-void prtchar(byte);
-void prtstr(char *, ...);
-void stdprtstr(char *, ...);
-void update(void);
-void clear_to_eol(void);
-void set_color(byte);
 
 #endif

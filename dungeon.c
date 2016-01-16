@@ -56,7 +56,6 @@ void dig_section(coord, coord);
 void dig_stairs(void);
 void connect_sections(coord, coord, coord, coord, byte);
 void get_random_section(coord *, coord *);
-void set_color_for_tile(char);
 
 byte rand_door(void);
 BOOL dir_possible(coord, coord, byte);
@@ -624,20 +623,18 @@ void know(coord x, coord y)
     return;
 
   set_knowledge(x, y, 1);
-  print_tile(x, y);
+  paint_tile(x, y);
 }
 
 
 
 /*
- * This function prints the tile at position (x, y) on the screen.
- * If necessary the map will be scrolled in 'map_cursor'.
+ * This function paints the tile at position (x, y) on the screen.
  */
 
-void print_tile(coord x, coord y)
+void paint_tile(coord x, coord y)
 {
-  map_cursor(x, y);
-  print_tile_at_position(x, y);
+  paint_tile_at_position(x, y);
 }
 
 
@@ -652,51 +649,30 @@ static void puttile(int x, int y, int tile)
 }
 
 /*
- * Print the tile at position (x, y) to the current screen position.
- *
- * NOTE: Monsters and items also need to be considered in this function.
+ * Paint the tile at position (x, y) to the current screen position.
  */
 
-void print_tile_at_position(coord x, coord y)
+void paint_tile_at_position(coord x, coord y)
 {
   byte tile;
 
   if (x <  0 || y < 0 || x > MAP_W || y > MAP_H || !is_known(x, y))
   {
-    set_color(C_BLACK);
-    prtchar(' ');
+    puttile(x, y, TILE_UNKNOWN);
   }
   else
   {
-    if (is_monster_at(x, y) && los(x, y))
-    {
-      struct monster *m = get_monster_at(x, y);
-
-      set_color(monster_color(m->midx));
-      prtchar(monster_tile(m->midx));
-    }
-    else
-    {
-      set_color_for_tile(map[x][y]);
-      prtchar(map[x][y]);
-    }
-
     tile = map[x][y];
     if (tile == FLOOR)
-    {
       puttile(x, y, TILE_CLEAR);
-    }
     else if (tile == STAIR_DOWN)
-    {
       puttile(x, y, TILE_STAIR_D);
-    }
     else if (tile == STAIR_UP)
-    {
       puttile(x, y, TILE_STAIR_U);
-    }
     else if (tile == ROCK)
     {
       int above;
+
       if (y-1 >= 0 && map[x][y-1] != FLOOR)
       {
         /* Test for special case, two vertical rocks */
@@ -715,9 +691,7 @@ void print_tile_at_position(coord x, coord y)
         puttile(x, y, TILE_BOTTOM);
       }
       else
-      {
         puttile(x, y, above);
-      }
     }
   }
 }
@@ -790,10 +764,6 @@ char tile_at(coord x, coord y)
 
 /*
  * Completely redraw the map.  Take also care of the visible panel area.
- *
- * Note: it's important that 'map_cursor' is not called in this function
- * since 'map_cursor' scrolls the screen if this is necessary.  Scrolling
- * the screen entails a call to 'paint_map' and you'd have an endless loop.
  */
 
 void paint_map(void)
@@ -803,99 +773,9 @@ void paint_map(void)
   /* Paint the map line by line. */
   for (y = d.psy * SECT_H; y < d.psy * SECT_H + VMAP_H; y++)
   {
-    cursor(0, 1 + y - d.psy * SECT_H);
     for (x = d.psx * SECT_W; x < d.psx * SECT_W + VMAP_W; x++)
-      print_tile_at_position(x, y);
+      paint_tile_at_position(x, y);
   }
-      
-  /* Update the screen. */
-  update();
-}
-
-
-
-
-/*
- * Set a color determined by the type of tile to be printed.
- */
-
-void set_color_for_tile(char tile)
-{
-  switch (tile)
-  {
-    case ROCK:
-      set_color(C_DARK_GRAY);
-      break;
-    case FLOOR:
-      set_color(C_LIGHT_GRAY);
-      break;
-    case STAIR_UP:
-    case STAIR_DOWN:
-      set_color(C_WHITE);
-      break;
-    default:
-      set_color(C_BROWN);
-      break;
-  }
-}
-
-
-
-/*
- * Set the screen cursor based upon the map coordinates.
- *
- * If necessary the screen map will be scrolled to show the current map
- * position on the screen.
- */
-
-void map_cursor(coord x, coord y)
-{
-  BOOL change = FALSE, any_change = FALSE;
-  coord xp, yp;
-
-  do
-  {
-    /* Any display change necessary? */
-    any_change |= change;
-    change = FALSE;
-
-    /* Determine the screen coordinates for the map coordinates. */
-    xp = x - d.psx * SECT_W;
-    yp = y - d.psy * SECT_H + 1;
-
-    /* Check scrolling to the right. */
-    if (yp < 1)
-    {
-      d.psy--;
-      change = TRUE;
-    }
-    /* Check scrolling to the left. */
-    else if (yp >= VMAP_H)
-    {
-      d.psy++;
-      change = TRUE;
-    }
-    /* Check scrolling downwards. */
-    if (xp < 1)
-    {
-      d.psx--;
-      change = TRUE;
-    }
-    /* Check scrolling upwards. */
-    else if (xp >= VMAP_W)
-    {
-      d.psx++;
-      change = TRUE;
-    }
-  }
-  while (change);
-
-  /* Scroll the map if required to do so. */
-  if (any_change)
-    paint_map();
-
-  /* Set the cursor. */
-  cursor(xp, yp);
 }
 
 

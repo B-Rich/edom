@@ -77,23 +77,11 @@ void play(void)
    * Standard stuff.
    */
   
-  /* Setup the screen. */
-  clear_screen();
-
   do
   {
     /* Print all the new things. */
     update_screen(d.px, d.py);
     update_player_status();
-
-    /* Display the player and center the cursor. */
-    map_cursor(d.px, d.py);
-    set_color(C_WHITE);
-    prtchar('@');
-    map_cursor(d.px, d.py);
-
-    /* Refresh the IO stuff. */
-    update();
 
     /* The message line should be cleared in any case. */
     clear_messages();
@@ -161,7 +149,7 @@ void play(void)
     d.opy = opy;
 
     /* Remove the player character from the screen. */
-    print_tile(opx, opy);
+    paint_tile(opx, opy);
   }
   while (quit == FALSE);
 }
@@ -385,7 +373,6 @@ void redraw(void)
   paint_map();
   update_necessary = TRUE;
   update_player_status();
-  update();
 }
 
 

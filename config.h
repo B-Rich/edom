@@ -37,17 +37,7 @@
  * If this doesn't work for you you need to define the required constant by
  * hand and will have to remove all the other constants.
  *
- * For DOS we support DJGPP (it sets the '__GO32__' flag).
- * For Linux we support the GCC (it sets the 'linux' flag).
  */
-
-#if defined(__GO32__)
-# define __TS_DOS__
-#elif defined(linux)
-# define __TS_LINUX__
-#else
-# error Please define your target system in 'config.h'.
-#endif
 
 
 /*

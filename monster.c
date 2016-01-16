@@ -55,10 +55,10 @@ struct monster_struct m;
 /* The complete monster list for the game. */
 struct monster_def md[MAX_MONSTER] =
 {
-  {'k', C_LIGHT_GREEN, "kobold", 14, "1d4", 1, 0, "1d6", COMMON},
-  {'r', C_BROWN, "rat", 12, "1d3", 1, 0, "1d3", COMMON},
-  {'g', C_LIGHT_BLUE, "goblin", 13, "1d8", 1, 0, "1d6", COMMON},
-  {'x', C_YELLOW, "lightning bug", 18, "2d3", 1, +1, "1d4", RARE}
+  {"hydra.png", 24, 28, "hydra", 14, "1d4", 1, 0, "1d6", COMMON},
+  {"gargoyle.png", 24, 32, "gargoyle", 12, "1d3", 1, 0, "1d3", COMMON},
+  {"reaper.png", 32, 32, "reaper", 13, "1d8", 1, 0, "1d6", COMMON},
+  {"samurai.png", 31, 32, "samurai", 18, "2d3", 1, +1, "1d4", RARE}
 };
 
 /* The dynamic index map for one monster level. */
@@ -266,24 +266,11 @@ void create_monster_in(byte midx)
   byte type;
 
   type = random_monster_type();
-  switch(type)
-  {
-    case 0:
-      init_actor(&m.m[d.dl][midx].a, "hydra.png", 24, 28, &common_anim);
-      break;
 
-    case 1:
-      init_actor(&m.m[d.dl][midx].a, "gargoyle.png", 24, 32, &common_anim);
-      break;
-
-    case 2:
-      init_actor(&m.m[d.dl][midx].a, "reaper.png", 32, 32, &common_anim);
-      break;
-
-    default:
-      init_actor(&m.m[d.dl][midx].a, "samurai.png", 31, 32, &common_anim);
-      break;
-  }
+  /* Initialize actor based on monster type */
+  init_actor(&m.m[d.dl][midx].a,
+             md[type].filename, md[type].w, md[type].h,
+             &common_anim);
 
   /* Adjust the 'empty' index. */
   if (m.eidx[d.dl] == midx)
@@ -401,28 +388,6 @@ void remove_monster_at(coord x, coord y)
   m.m[d.dl][midx[x][y]].midx = -1;
   m.m[d.dl][midx[x][y]].used = FALSE;
   midx[x][y] = -1;
-}
-
-
-
-/*
- * Return the color for an indexed monster.
- */
-
-byte monster_color(byte midx)
-{
-  return md[m.m[d.dl][midx].midx].color;
-}
-
-
-
-/*
- * Return the picture for an indexed monster.
- */
-
-byte monster_tile(byte midx)
-{
-  return md[m.m[d.dl][midx].midx].symbol;
 }
 
 

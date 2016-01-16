@@ -17,14 +17,8 @@ OBJ = main.o actor.o ctrl.o dungeon.o sysdep.o error.o game.o misc.o monster.o p
 # Linux
 
 CC     = gcc
-LFLAGS = -g -o edom -lncurses -lSDL -lSDL_image
-CFLAGS = -g -Wall -Dlinux -DSDL_GFX -DSDL_CTRL -I/usr/include/SDL
-
-# DOS
-
-#CC = gcc
-#LFLAGS = -o edom
-#CFLAGS = -Wall -O2
+LFLAGS = -g -o edom -lSDL -lSDL_image
+CFLAGS = -g -Wall -DSDL_GFX -DSDL_CTRL -I/usr/include/SDL
 
 #
 # Targets.
@@ -43,7 +37,7 @@ clean:
 	rm *.o edom
 
 count:
-	wc *.c *.h Makefile
+	wc *.c *.h makefile
 
 #
 # Dependencies.

@@ -94,15 +94,15 @@ char tile_at(coord, coord);
 
 void init_dungeon(int tile_base);
 void build_map(void);
-void print_map(void);
+void paint_map(void);
 void know(coord, coord);
 void know_section(coord, coord);
 void get_current_section(coord, coord, coord *, coord *);
 void get_current_section_coordinates(coord, coord, coord *, coord *);
 void paint_map(void);
 void map_cursor(coord, coord);
-void print_tile(coord, coord);
-void print_tile_at_position(coord, coord);
+void paint_tile(coord, coord);
+void paint_tile_at_position(coord, coord);
 void change_door(coord, coord, byte);
 BOOL is_floor(coord x, coord y);
 void set_knowledge(coord, coord, byte);

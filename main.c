@@ -116,21 +116,15 @@ int main(int argc, char **argv)
   if (!init())
     return 1;
 
-  stdprtstr("Setting up the game...");
-  
   /* Initialize everything. */
   init_rand();
   init_player();
   init_monsters();
   init_dungeon(tile_base);
-  init_io();
   
   /* Play the game. */
   play();
 
-  /* Clean up. */
-  clean_up_io();
-  
   /* Be done. */
   return 0;
 }

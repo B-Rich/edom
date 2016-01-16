@@ -34,11 +34,13 @@
  * Local variables.
  */
 
+#if 0
 /* Is the message buffer currently used? */
 static BOOL mbuffer_full = FALSE;
 
 /* What's the current x position in the message buffer? */
 static byte mbuffer_x = 0;
+#endif
 
 
 
@@ -63,6 +65,7 @@ void more(void);
 
 void message(char *fmt, ...)
 {
+#if 0
   va_list vl;
   static char buffer[1000];
 
@@ -78,9 +81,6 @@ void message(char *fmt, ...)
   /* Position the cursor. */
   cursor(0, 0);
 
-  /* Reset the color. */
-  set_color(C_LIGHT_GRAY);
-
   /* Display the message. */
   prtstr("%s", buffer);
 
@@ -90,6 +90,7 @@ void message(char *fmt, ...)
   /* Note the new message in the buffer. */
   mbuffer_full = TRUE;
   mbuffer_x = strlen(buffer) + 1;
+#endif
 }
 
 
@@ -119,11 +120,12 @@ void you(char *fmt, ...)
 
 void more(void)
 {
+#if 0
   cursor(mbuffer_x, 0);
-  set_color(C_WHITE);
   prtstr("(more)");
   while (getkey() != ' ');
   clear_messages();
+#endif
 }
 
 
@@ -134,10 +136,12 @@ void more(void)
 
 void clear_messages(void)
 {
+#if 0
   cursor(0, 0);
   clear_to_eol();
   mbuffer_full = FALSE;
   mbuffer_x = 0;
+#endif
 }
 
 
