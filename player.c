@@ -125,29 +125,31 @@ byte get_attribute(byte attribute)
  * Draw the status line.
  */
 
-void update_player_status(void)
+void draw_player_status(void)
 {
-#if 0
+  static char str[80];
+
   if (update_necessary)
   {
-    cursor(0, 24);
-    prtstr("%s   St:%d  In:%d  Dx:%d  To:%d  Ma:%d  H:%d(%d)  P:%d(%d)  X:%ld"
-	   , d.pc.name
-	   , (int) d.pc.attribute[STRENGTH]
-	   , (int) d.pc.attribute[INTELLIGENCE]
-	   , (int) d.pc.attribute[DEXTERITY]
-	   , (int) d.pc.attribute[TOUGHNESS]
-	   , (int) d.pc.attribute[MANA]
-	   , (int) d.pc.hits
-	   , (int) d.pc.max_hits
-	   , (int) d.pc.power
-	   , (int) d.pc.max_power
-	   , (long) d.pc.experience);
-    clear_to_eol();
-    
+    sprintf(str,
+           "%s   St:%d  In:%d  Dx:%d  To:%d  Ma:%d  H:%d(%d)  P:%d(%d)  X:%ld"
+            , d.pc.name
+            , (int) d.pc.attribute[STRENGTH]
+            , (int) d.pc.attribute[INTELLIGENCE]
+            , (int) d.pc.attribute[DEXTERITY]
+            , (int) d.pc.attribute[TOUGHNESS]
+            , (int) d.pc.attribute[MANA]
+            , (int) d.pc.hits
+            , (int) d.pc.max_hits
+            , (int) d.pc.power
+            , (int) d.pc.max_power
+            , (long) d.pc.experience);
+
+    draw_fixed_text(0, screen_height + MSG_H, screen_width - 2 * FNT_W, str,
+                    font);
+
     update_necessary = FALSE;
   }
-#endif
 }
 
 

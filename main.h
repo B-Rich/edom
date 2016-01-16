@@ -35,6 +35,7 @@
 #include "monster.h"
 #include "player.h"
 #include "actor.h"
+#include "draw_text.h"
 #include "sysdep.h"
 
 
@@ -118,6 +119,9 @@ struct dungeon_complex d;
 
 int screen_width;
 int screen_height;
+
+FONT *font;
+
 struct anim_info common_anim;
 
 void flip(void);

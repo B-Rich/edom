@@ -59,6 +59,12 @@ static void game_keydown(int key)
 
   if (input & PRESS_FIRE)
     attack();
+
+  if (input & PRESS_ADVANCE)
+    descend_level();
+
+  if (input & PRESS_REVERT)
+    ascend_level();
 }
 
 
@@ -97,7 +103,6 @@ void play(void)
   {
     /* Print all the new things. */
     update_screen(d.px, d.py);
-    update_player_status();
 
     /* The message line should be cleared in any case. */
     clear_messages();
@@ -209,9 +214,13 @@ void update_screen(coord x, coord y)
     know_section(sx, sy);
 
   move_dungeon();
+
   draw_dungeon();
   draw_monsters();
   draw_actor(&d.pa);
+
+  draw_player_status();
+
   flip();
 }
 
@@ -383,7 +392,6 @@ void redraw(void)
   clear_messages();
   paint_map();
   update_necessary = TRUE;
-  update_player_status();
 }
 
 

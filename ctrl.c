@@ -23,8 +23,6 @@
 
 #include "ctrl.h"
 
-#ifdef SDL_CTRL
-
 int get_input(void)
 {
   int input = 0;
@@ -50,6 +48,12 @@ int get_input(void)
 
   if(keys[SDLK_SPACE])
     input=SET_BITS(input,PRESS_FIRE);
+
+  if(keys[SDLK_PAGEUP])
+    input=SET_BITS(input,PRESS_ADVANCE);
+
+  if(keys[SDLK_PAGEDOWN])
+    input=SET_BITS(input,PRESS_REVERT);
 
   return input;
 }
@@ -81,6 +85,12 @@ int get_input_keydown(int ks)
       case SDLK_SPACE:
          input=SET_BITS(input,PRESS_FIRE);
          break;
+      case SDLK_PAGEUP:
+         input=SET_BITS(input,PRESS_ADVANCE);
+         break;
+      case SDLK_PAGEDOWN:
+         input=SET_BITS(input,PRESS_REVERT);
+         break;
       default: break;
    }
 
@@ -114,90 +124,15 @@ int get_input_keyup(int ks)
       case SDLK_SPACE:
          input=RESET_BITS(input,PRESS_FIRE);
          break;
+      case SDLK_PAGEUP:
+         input=RESET_BITS(input,PRESS_ADVANCE);
+         break;
+      case SDLK_PAGEDOWN:
+         input=RESET_BITS(input,PRESS_REVERT);
+         break;
       default: break;
    }
 
    return input;
 }
-
-#else
-
-static int global_input = 0;
-
-int get_input(void)
-{
-  return global_input;
-}
-
-int get_input_keydown(int ks)
-{
-   int input = 0;
-
-   switch(ks)
-   {
-      case XK_Escape:
-	 input=SET_BITS(input,PRESS_ESC);
-	 break;
-      case XK_Up:
-         input=SET_BITS(input,PRESS_UP);
-         break;
-      case XK_Right:
-         input=SET_BITS(input,PRESS_RIGHT);
-         break;
-      case XK_Left:
-         input=SET_BITS(input,PRESS_LEFT);
-         break;
-      case XK_Down:
-         input=SET_BITS(input,PRESS_DOWN);
-         break;
-      case XK_Return:
-         input=SET_BITS(input,PRESS_ENTER);
-         break;
-      case XK_space:
-         input=SET_BITS(input,PRESS_FIRE);
-         break;
-      default: break;
-   }
-
-   global_input = input;
-
-   return input;
-}
-
-int get_input_keyup(int ks)
-{
-   int input = 0;
-
-   switch(ks)
-   {
-      case XK_Escape:
-	 input=RESET_BITS(input,PRESS_ESC);
-         break;
-      case XK_Up:
-         input=RESET_BITS(input,PRESS_UP);
-         break;
-      case XK_Right:
-         input=RESET_BITS(input,PRESS_RIGHT);
-         break;
-      case XK_Left:
-         input=RESET_BITS(input,PRESS_LEFT);
-         break;
-      case XK_Down:
-         input=RESET_BITS(input,PRESS_DOWN);
-         break;
-      case XK_Return:
-         input=RESET_BITS(input,PRESS_ENTER);
-         break;
-      case XK_space:
-         input=RESET_BITS(input,PRESS_FIRE);
-         break;
-      default: break;
-   }
-
-   global_input = input;
-
-   return input;
-}
-
-#endif
 

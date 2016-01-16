@@ -106,7 +106,7 @@ extern BOOL update_necessary;
 byte get_attribute(byte);
 
 void init_player(void);
-void update_player_status(void);
+void draw_player_status(void);
 void set_attribute(byte, byte);
 void adjust_training(void);
 void score_exp(int32);

@@ -65,10 +65,20 @@
  */
 
 /* Screen width. */
-#define SCREEN_W 80
+#define SCREEN_W 640
 
 /* Screen height. */
-#define SCREEN_H 25
+#define SCREEN_H 480
+
+/* Font size */
+#define FNT_H 8
+#define FNT_W 8
+
+/* Message bar height */
+#define MSG_H 24
+
+/* Status bar height */
+#define STATUS_H 24
 
 /* Section width. */
 #define SECT_W 15

@@ -21,12 +21,7 @@
 #ifndef _ctrl_h
 #define _ctrl_h
 
-#ifdef SDL_CTRL
 #include "SDL.h"
-#else
-#include <X11/Xlib.h>
-#include <X11/keysym.h>
-#endif
 
 #define PRESS_RIGHT 1
 #define PRESS_LEFT 2
@@ -34,7 +29,10 @@
 #define PRESS_DOWN 8
 #define PRESS_ENTER 16
 #define PRESS_FIRE 32
-#define PRESS_ESC 64
+#define PRESS_ADVANCE 64
+#define PRESS_REVERT 128
+#define PRESS_ESC 256
+
 #define SET_BITS(x,bits) (x|bits)
 #define RESET_BITS(x,bits) (x&~bits)
 

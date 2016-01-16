@@ -41,8 +41,10 @@
 
 static SDL_Surface *screen;
 
-int screen_width = 640;
-int screen_height = 480;
+int screen_width = 0;
+int screen_height = 0;
+
+FONT *font;
 
 struct anim_info common_anim =
 {
@@ -75,15 +77,26 @@ int init(void)
   atexit(SDL_Quit);
 
   /* Initialize screen, setup gfx mode */
-  screen = SDL_SetVideoMode(screen_width, screen_height, 32,
+  screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 32,
                             SDL_HWSURFACE|SDL_DOUBLEBUF);
-  if (screen == NULL) {
+  if (screen == NULL)
+  {
     fprintf(stderr, "Fatal Error -- Unable to set video mode: %s\n",
             SDL_GetError());
     return 0;
   }
 
-  set_sprite_context(screen, screen_width, screen_height);
+  set_sprite_context(screen, SCREEN_W, SCREEN_H);
+
+  screen_width = SCREEN_W;
+  screen_height = SCREEN_H - MSG_H - STATUS_H;
+
+  font = load_font("fntdag.png", FNT_W, FNT_H);
+  if (font == NULL)
+  {
+    fprintf(stderr, "Fatal Error -- Unable to load font\n");
+    return 0;
+  }
 
   return 1;
 }

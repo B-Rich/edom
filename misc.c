@@ -34,13 +34,11 @@
  * Local variables.
  */
 
-#if 0
 /* Is the message buffer currently used? */
 static BOOL mbuffer_full = FALSE;
 
 /* What's the current x position in the message buffer? */
 static byte mbuffer_x = 0;
-#endif
 
 
 
@@ -65,7 +63,6 @@ void more(void);
 
 void message(char *fmt, ...)
 {
-#if 0
   va_list vl;
   static char buffer[1000];
 
@@ -74,23 +71,18 @@ void message(char *fmt, ...)
   vsprintf(buffer, fmt, vl);
   va_end(vl);
 
+#if 0
   /* Clear the message buffer if necessary. */
   if (mbuffer_full)
     more();
-
-  /* Position the cursor. */
-  cursor(0, 0);
+#endif
 
   /* Display the message. */
-  prtstr("%s", buffer);
-
-  /* Update the screen. */
-  update();
+  draw_fixed_text(0, screen_height, screen_width - 2 * FNT_W, buffer, font);
 
   /* Note the new message in the buffer. */
   mbuffer_full = TRUE;
   mbuffer_x = strlen(buffer) + 1;
-#endif
 }
 
 
