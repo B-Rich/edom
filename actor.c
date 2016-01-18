@@ -13,11 +13,12 @@ void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim
   }
 
   a->is_moving = FALSE;
+  a->is_attacking = FALSE;
   a->dx = 0;
   a->dy = 0;
 
   a->base_frame = 0;
-  a->delta_frame = 1;
+  a->delta_frame = 0;
   a->rev_anim = FALSE;
   a->counter = 0;
 
@@ -26,7 +27,9 @@ void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim
 
 void set_dir_actor(struct actor *a, enum facing dir)
 {
+  a->counter = 0;
   a->dir = dir;
+  a->delta_frame = 1;
 
   switch (dir)
   {
@@ -52,7 +55,7 @@ void set_dir_actor(struct actor *a, enum facing dir)
   }
 }
 
-void animate_actor(struct actor *a)
+void animate_walk_actor(struct actor *a)
 {
   if (++a->counter == a->anim_info.treshold)
   {
@@ -109,7 +112,7 @@ void animate_move_actor(struct actor *a)
 {
   if (a->is_moving == TRUE)
   {
-    animate_actor(a);
+    animate_walk_actor(a);
 
     if (a->dx)
     {
@@ -135,9 +138,58 @@ void animate_move_actor(struct actor *a)
   }
 }
 
+void set_attack_actor(struct actor *a, enum facing dir)
+{
+  a->counter = 0;
+  a->delta_frame = 0;
+  a->dir = dir;
+  a->is_attacking = TRUE;
+
+  switch (dir)
+  {
+    case LEFT:
+      a->base_frame = a->anim_info.attack_left;
+      break;
+
+    case RIGHT:
+      a->base_frame = a->anim_info.attack_right;
+      break;
+
+    case UP:
+      a->base_frame = a->anim_info.attack_up;
+      break;
+
+    case DOWN:
+      a->base_frame = a->anim_info.attack_down;
+      break;
+
+    default:
+      a->base_frame = 0;
+      break;
+  }
+}
+
+void animate_attack_actor(struct actor *a)
+{
+  if (a->is_attacking)
+  {
+    if (++a->counter == a->anim_info.treshold)
+    {
+      if (++a->delta_frame > a->anim_info.num_attack_frames - 1)
+      {
+        set_dir_actor(a, a->dir);
+        a->is_attacking = FALSE;
+      }
+
+      a->counter = 0;
+    }
+  }
+}
+
 void draw_actor(struct actor *a)
 {
-  draw_sprite(a->x - d.map_x, a->y - d.map_y,
+  draw_sprite(a->x - a->anim_info.anchor_x - d.map_x,
+              a->y - a->anim_info.anchor_y - d.map_y,
               a->base_frame + a->delta_frame, a->spr,
               0, 0, screen_width, screen_height);
 }

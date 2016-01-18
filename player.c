@@ -44,6 +44,17 @@ static char *tskill_s[MAX_T_SKILL] =
 };
 
 
+static struct anim_info player_anim =
+{
+  22, 22,
+  5, 10, 15, 0,
+  3,
+  2,
+  4,
+  8, 13, 18, 3,
+  2
+};
+
 /*
  * Local prototypes.
  */
@@ -61,7 +72,7 @@ void init_player(void)
 {
   byte i;
 
-  init_actor(&d.pa, "aron.png", 24, 32, &common_anim);
+  init_actor(&d.pa, "viking.png", 76, 76, &player_anim);
 
   /* Initial attributes. */
   for (i = 0; i < MAX_ATTRIBUTE; i++)
@@ -473,6 +484,8 @@ void place_player(byte px, byte py)
   d.pa.is_moving = FALSE;
   d.pa.dx = 0;
   d.pa.dy = 0;
+
+  set_dir_actor(&d.pa, DOWN);
 }
 
 void move_player(enum facing dir)

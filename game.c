@@ -111,7 +111,12 @@ void play(int start_level)
     opx = d.px;
     opy = d.py;
 
-    if (d.pa.is_moving == TRUE)
+    if (d.pa.is_attacking == TRUE)
+    {
+      move_monsters();
+      animate_attack_actor(&d.pa);
+    }
+    else if (d.pa.is_moving == TRUE)
     {
       move_monsters();
       animate_move_actor(&d.pa);
@@ -524,7 +529,10 @@ void attack(void)
     return;
 
   if (is_monster_at(tx, ty))
+  {
+    set_attack_actor(&d.pa, d.pa.dir);
     attack_monster_at(tx, ty);
+  }
 }
 
 
