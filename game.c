@@ -528,10 +528,16 @@ void attack(void)
   if (tx == -1 || ty == -1)
     return;
 
+  set_attack_actor(&d.pa, d.pa.dir);
+
   if (is_monster_at(tx, ty))
   {
-    set_attack_actor(&d.pa, d.pa.dir);
+    message("Strike at monster");
     attack_monster_at(tx, ty);
+  }
+  else
+  {
+    message("No monster within range");
   }
 }
 
