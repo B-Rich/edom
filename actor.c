@@ -12,8 +12,7 @@ void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim
     exit(1);
   }
 
-  a->is_moving = FALSE;
-  a->is_attacking = FALSE;
+  a->act = IDLE;
   a->dx = 0;
   a->dy = 0;
 
@@ -105,12 +104,12 @@ void move_actor(struct actor *a, enum facing dir)
       break;
   }
 
-  a->is_moving = TRUE;
+  a->act = MOVE;
 }
 
 void animate_move_actor(struct actor *a)
 {
-  if (a->is_moving == TRUE)
+  if (a->act == MOVE)
   {
     animate_walk_actor(a);
 
@@ -121,7 +120,7 @@ void animate_move_actor(struct actor *a)
       {
         a->dx = 0;
         a->delta_frame = 1;
-        a->is_moving = FALSE;
+        a->act = IDLE;
       }
     }
 
@@ -132,7 +131,7 @@ void animate_move_actor(struct actor *a)
       {
         a->dy = 0;
         a->delta_frame = 1;
-        a->is_moving = FALSE;
+        a->act = IDLE;
       }
     }
   }
@@ -143,7 +142,7 @@ void set_attack_actor(struct actor *a, enum facing dir)
   a->counter = 0;
   a->delta_frame = 0;
   a->dir = dir;
-  a->is_attacking = TRUE;
+  a->act = ATTACK;
 
   switch (dir)
   {
@@ -171,14 +170,14 @@ void set_attack_actor(struct actor *a, enum facing dir)
 
 void animate_attack_actor(struct actor *a)
 {
-  if (a->is_attacking)
+  if (a->act == ATTACK)
   {
     if (++a->counter == a->anim_info.treshold)
     {
       if (++a->delta_frame > a->anim_info.num_attack_frames - 1)
       {
         set_dir_actor(a, a->dir);
-        a->is_attacking = FALSE;
+        a->act = IDLE;
       }
 
       a->counter = 0;

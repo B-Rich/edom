@@ -481,7 +481,7 @@ void place_player(byte px, byte py)
   d.opy = py;
   d.pa.y = (int16) py * TILE_HEIGHT;
 
-  d.pa.is_moving = FALSE;
+  d.pa.act = IDLE;
   d.pa.dx = 0;
   d.pa.dy = 0;
 
@@ -490,7 +490,7 @@ void place_player(byte px, byte py)
 
 void move_player(enum facing dir)
 {
-  if (d.pa.is_moving == FALSE)
+  if (d.pa.act == IDLE)
   {
     move_actor(&d.pa, dir);
     d.px += d.pa.dx;

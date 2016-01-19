@@ -445,7 +445,7 @@ void move_monster(struct monster *m, enum facing dir)
 {
   byte i;
 
-  if (m->a.is_moving == FALSE)
+  if (m->a.act == IDLE)
   {
     set_dir_actor(&m->a, dir);
     move_actor(&m->a, dir);
@@ -482,9 +482,9 @@ void move_monsters(void)
       {
         struct monster *mi = get_monster_at(sx + x, sy + y);
 
-        if (mi->a.is_moving == TRUE)
+        if (mi->a.act == MOVE)
           animate_move_actor(&mi->a);
-        else
+        else if (mi->a.act == IDLE)
         {
           if (mi->state == ASLEEP)
           {

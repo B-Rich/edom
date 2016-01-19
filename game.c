@@ -111,17 +111,17 @@ void play(int start_level)
     opx = d.px;
     opy = d.py;
 
-    if (d.pa.is_attacking == TRUE)
+    if (d.pa.act == ATTACK)
     {
       move_monsters();
       animate_attack_actor(&d.pa);
     }
-    else if (d.pa.is_moving == TRUE)
+    else if (d.pa.act == MOVE)
     {
       move_monsters();
       animate_move_actor(&d.pa);
     }
-    else
+    else if (d.pa.act == IDLE)
     {
       SDL_Event event;
 

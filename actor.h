@@ -9,6 +9,11 @@ enum facing
   LEFT, RIGHT, UP, DOWN
 };
 
+enum action
+{
+  IDLE, MOVE, ATTACK
+};
+
 struct anim_info
 {
   int anchor_x, anchor_y;
@@ -31,11 +36,8 @@ struct actor
   /* Which direction is the actor facing */
   enum facing dir;
 
-  /* Set while player is moving from one tile to another */
-  BOOL is_moving;
-
-  /* Set while the player is attacking */
-  BOOL is_attacking;
+  /* Actor action */
+  enum action act;
 
   /* Animation information */
   struct anim_info anim_info;
