@@ -185,6 +185,18 @@ void animate_attack_actor(struct actor *a)
   }
 }
 
+void face_target_actor(struct actor *a, struct actor *target)
+{
+  if (target->x < a->x)
+    set_dir_actor(a, LEFT);
+  else if (target->x > a->x)
+    set_dir_actor(a, RIGHT);
+  else if (target->y < a->y)
+    set_dir_actor(a, UP);
+  else if (target->y > a->y)
+    set_dir_actor(a, DOWN);
+}
+
 void draw_actor(struct actor *a)
 {
   draw_sprite(a->x - a->anim_info.anchor_x - d.map_x,

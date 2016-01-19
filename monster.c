@@ -376,9 +376,10 @@ struct monster *get_monster_at(coord x, coord y)
 
 void attack_monster_at(coord x, coord y)
 {
-  struct monster *m = get_monster_at(x, y);
+  struct monster *mi = get_monster_at(x, y);
 
-  m->state = ANGRY;
+  /* TODO */
+  message("Attacked %s", md[mi->midx].name);
 }
 
 
@@ -493,9 +494,16 @@ void move_monsters(void)
           }
           else if (mi->state == NEUTRAL)
           {
-            enum facing dir = rand_long(4);
-            if (is_clear(mi, dir))
-              move_monster(mi, dir);
+            if (abs(mi->x - d.px) <= 1 && abs(mi->y - d.py) <= 1)
+            {
+              mi->state = ANGRY;
+            }
+            else
+            {
+              enum facing dir = rand_long(4);
+              if (is_clear(mi, dir))
+                move_monster(mi, dir);
+            }
           }
           else if (mi->state == ANGRY)
           {
@@ -507,6 +515,8 @@ void move_monsters(void)
               move_monster(mi, UP);
             else if (d.py > mi->y && is_clear(mi, DOWN))
               move_monster(mi, DOWN);
+            else
+              face_target_actor(&mi->a, &d.pa);
           }
         }
       }

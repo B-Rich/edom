@@ -61,6 +61,7 @@ void move_actor(struct actor *a, enum facing dir);
 void animate_move_actor(struct actor *a);
 void set_attack_actor(struct actor *a, enum facing dir);
 void animate_attack_actor(struct actor *a);
+void face_target_actor(struct actor *a, struct actor *target);
 void draw_actor(struct actor *a);
 
 #endif

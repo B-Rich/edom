@@ -183,10 +183,13 @@ void play(int start_level)
 
 void update_screen(coord x, coord y)
 {
-  coord sx, sy, px, py, opsx, opsy;
+  coord sx, sy, px, py;
 
   /* Find the current general section. */
   get_current_section_coordinates(d.px, d.py, &sx, &sy);
+
+#ifdef UPDATE_PANEL_VIEW
+  coord opsx, opsy;
 
   /* Memorize the old panel view. */
   opsx = d.psx;
@@ -205,6 +208,7 @@ void update_screen(coord x, coord y)
   /* Repaint the whole screen map if necessary. */
   if (opsx != d.psx || opsy != d.psy)
     paint_map();
+#endif
 
   /* Make the immediate surroundings known. */
   for (px = x - 1; px <= x + 1; px++)
@@ -531,14 +535,9 @@ void attack(void)
   set_attack_actor(&d.pa, d.pa.dir);
 
   if (is_monster_at(tx, ty))
-  {
-    message("Strike at monster");
     attack_monster_at(tx, ty);
-  }
   else
-  {
     message("No monster within range");
-  }
 }
 
 
