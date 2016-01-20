@@ -379,7 +379,19 @@ void attack_monster_at(coord x, coord y)
   struct monster *mi = get_monster_at(x, y);
 
   /* TODO */
-  message("Attacked %s", md[mi->midx].name);
+  int damage = 1;
+
+  mi->hp -= damage;
+  if (mi->hp <= 0)
+  {
+    you("%s perrished.", md[mi->midx].name);
+    remove_monster_at(x, y);
+  }
+  else
+  {
+    set_counter_actor(&mi->a, &d.pa);
+    you("Attacked %s and caused %d damage.", md[mi->midx].name, damage);
+  }
 }
 
 
@@ -483,8 +495,19 @@ void move_monsters(void)
       {
         struct monster *mi = get_monster_at(sx + x, sy + y);
 
-        if (mi->a.act == MOVE)
+        if (mi->a.act == COUNTER)
+        {
+          move_counter_actor(&mi->a);
+        }
+        else if (mi->a.act == ATTACK)
+        {
+          message("%s attacked you.", md[mi->midx].name);
+          mi->a.act = IDLE;
+        }
+        else if (mi->a.act == MOVE)
+        {
           animate_move_actor(&mi->a);
+        }
         else if (mi->a.act == IDLE)
         {
           if (mi->state == ASLEEP)

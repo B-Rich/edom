@@ -123,6 +123,7 @@ void play(int start_level)
     }
     else if (d.pa.act == IDLE)
     {
+      move_monsters();
       SDL_Event event;
 
       while (SDL_PollEvent(&event))
@@ -525,6 +526,8 @@ void attack(void)
 {
   coord tx, ty;
 
+  message("Which monster?");
+
   /* Find the monster. */
   get_target(d.px, d.py, &tx, &ty);
 
@@ -532,12 +535,11 @@ void attack(void)
   if (tx == -1 || ty == -1)
     return;
 
-  set_attack_actor(&d.pa, d.pa.dir);
-
   if (is_monster_at(tx, ty))
+  {
+    set_attack_actor(&d.pa, d.pa.dir);
     attack_monster_at(tx, ty);
-  else
-    message("No monster within range");
+  }
 }
 
 

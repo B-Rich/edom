@@ -11,7 +11,7 @@ enum facing
 
 enum action
 {
-  IDLE, MOVE, ATTACK
+  IDLE, MOVE, COUNTER, ATTACK
 };
 
 struct anim_info
@@ -59,6 +59,8 @@ void set_dir_actor(struct actor *a, enum facing dir);
 void animate_walk_actor(struct actor *a);
 void move_actor(struct actor *a, enum facing dir);
 void animate_move_actor(struct actor *a);
+void set_counter_actor(struct actor *a, struct actor *target);
+void move_counter_actor(struct actor *a);
 void set_attack_actor(struct actor *a, enum facing dir);
 void animate_attack_actor(struct actor *a);
 void face_target_actor(struct actor *a, struct actor *target);
