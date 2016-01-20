@@ -137,6 +137,24 @@ void animate_move_actor(struct actor *a)
   }
 }
 
+void set_counter_actor(struct actor *a, struct actor *target)
+{
+  a->counter = 0;
+  a->delta_frame = 0;
+  a->act = COUNTER;
+  face_target_actor(a, target);
+}
+
+void move_counter_actor(struct actor *a)
+{
+  /* Replace with configurable time */
+  if (++a->counter >= 10)
+  {
+    a->counter = 0;
+    a->act = ATTACK;
+  }
+}
+
 void set_attack_actor(struct actor *a, enum facing dir)
 {
   a->counter = 0;
