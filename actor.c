@@ -13,8 +13,8 @@ void init_actor(struct actor *a, const char *fn, int w, int h, const struct anim
   }
 
   a->act = IDLE;
-  a->dx = 0;
-  a->dy = 0;
+  a->tx = 0;
+  a->ty = 0;
 
   a->base_frame = 0;
   a->delta_frame = 0;
@@ -84,85 +84,97 @@ void move_actor(struct actor *a, enum facing dir)
   switch(dir)
   {
     case DOWN:
-      a->dx = 0;
-      a->dy = 1;
+      a->tx = 0;
+      a->ty = 1;
       break;
 
     case LEFT:
-      a->dx = -1;
-      a->dy = 0;
+      a->tx = -1;
+      a->ty = 0;
       break;
 
     case RIGHT:
-      a->dx = 1;
-      a->dy = 0;
+      a->tx = 1;
+      a->ty = 0;
       break;
 
     case UP:
-      a->dx = 0;
-      a->dy = -1;
+      a->tx = 0;
+      a->ty = -1;
       break;
   }
 
   a->act = MOVE;
 }
 
-void animate_move_actor(struct actor *a)
+BOOL animate_move_actor(struct actor *a)
 {
+  BOOL is_done = FALSE;
+
   if (a->act == MOVE)
   {
     animate_walk_actor(a);
 
-    if (a->dx)
+    if (a->tx)
     {
-      a->x += a->dx * a->anim_info.speed;
+      a->x += a->tx * a->anim_info.speed;
       if ((a->x % TILE_WIDTH) == 0)
       {
-        a->dx = 0;
+        a->tx = 0;
         a->delta_frame = 1;
         a->act = IDLE;
+        is_done = TRUE;
       }
     }
 
-    if (a->dy)
+    if (a->ty)
     {
-      a->y += a->dy * a->anim_info.speed;
+      a->y += a->ty * a->anim_info.speed;
       if ((a->y % TILE_HEIGHT) == 0)
       {
-        a->dy = 0;
+        a->ty = 0;
         a->delta_frame = 1;
         a->act = IDLE;
+        is_done = TRUE;
       }
     }
   }
+
+  return is_done;
 }
 
-void set_counter_actor(struct actor *a, struct actor *target)
+void set_charge_actor(struct actor *a, struct actor *target, int tx, int ty)
 {
+  a->tx = tx;
+  a->ty = ty;
   a->counter = 0;
   a->delta_frame = 0;
-  a->act = COUNTER;
+  a->act = CHARGE;
   face_target_actor(a, target);
 }
 
-void move_counter_actor(struct actor *a)
+BOOL animate_charge_actor(struct actor *a)
 {
-  /* Replace with configurable time */
-  if (++a->counter >= 10)
+  BOOL is_done = FALSE;
+
+  if (++a->counter >= a->anim_info.latency)
   {
     a->counter = 0;
+    set_attack_actor(a);
     a->act = ATTACK;
+    is_done = TRUE;
   }
+
+  return is_done;
 }
 
-void set_attack_actor(struct actor *a, enum facing dir)
+void set_attack_actor(struct actor *a)
 {
   a->counter = 0;
   a->delta_frame = 0;
-  a->dir = dir;
   a->act = ATTACK;
 
-  switch (dir)
+  switch (a->dir)
   {
     case LEFT:
       a->base_frame = a->anim_info.attack_left;
@@ -186,8 +198,10 @@ void set_attack_actor(struct actor *a, enum facing dir)
   }
 }
 
-void animate_attack_actor(struct actor *a)
+BOOL animate_attack_actor(struct actor *a)
 {
+  BOOL is_done = FALSE;
+
   if (a->act == ATTACK)
   {
     if (++a->counter == a->anim_info.treshold)
@@ -196,11 +210,21 @@ void animate_attack_actor(struct actor *a)
       {
         set_dir_actor(a, a->dir);
         a->act = IDLE;
+        is_done = TRUE;
       }
 
       a->counter = 0;
     }
   }
+
+  return is_done;
+}
+
+void set_perished_actor(struct actor *a)
+{
+  a->act = PERISHED;
+  a->base_frame = a->anim_info.perished;
+  a->delta_frame = 0;
 }
 
 void face_target_actor(struct actor *a, struct actor *target)

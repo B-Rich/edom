@@ -111,35 +111,26 @@ void play(int start_level)
     opx = d.px;
     opy = d.py;
 
-    if (d.pa.act == ATTACK)
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event))
     {
-      move_monsters();
-      animate_attack_actor(&d.pa);
-    }
-    else if (d.pa.act == MOVE)
-    {
-      move_monsters();
-      animate_move_actor(&d.pa);
-    }
-    else if (d.pa.act == IDLE)
-    {
-      move_monsters();
-      SDL_Event event;
-
-      while (SDL_PollEvent(&event))
-      {
-        if (event.type == SDL_QUIT)
-          quit = TRUE;
-
-        if (event.type == SDL_KEYDOWN)
-          game_keydown(event.key.keysym.sym);
-      }
-
-      int input = get_input();
-
-      if (input & PRESS_ESC)
+      if (event.type == SDL_QUIT)
         quit = TRUE;
 
+      if (event.type == SDL_KEYDOWN)
+        game_keydown(event.key.keysym.sym);
+    }
+
+    int input = get_input();
+
+    if (input & PRESS_ESC)
+      quit = TRUE;
+
+    BOOL player_turn = move_monsters();
+
+    if (player_turn && d.pa.act == IDLE)
+    {
       if (input & PRESS_LEFT)
       {
         set_dir_actor(&d.pa, LEFT);
@@ -168,6 +159,19 @@ void play(int start_level)
             !is_monster_at(d.px, d.py + 1))
           move_player(DOWN);
       }
+    }
+    else if (d.pa.act == MOVE)
+    {
+      animate_move_actor(&d.pa);
+    }
+    else if (d.pa.act == CHARGE)
+    {
+      animate_charge_actor(&d.pa);
+    }
+    else if (d.pa.act == ATTACK)
+    {
+      if (animate_attack_actor(&d.pa))
+        attack_monster_at(d.pa.tx, d.pa.ty);
     }
 
     d.opx = opx;
@@ -526,19 +530,22 @@ void attack(void)
 {
   coord tx, ty;
 
-  message("Which monster?");
-
-  /* Find the monster. */
-  get_target(d.px, d.py, &tx, &ty);
-
-  /* Command aborted? */
-  if (tx == -1 || ty == -1)
-    return;
-
-  if (is_monster_at(tx, ty))
+  if (d.pa.act == IDLE)
   {
-    set_attack_actor(&d.pa, d.pa.dir);
-    attack_monster_at(tx, ty);
+    message("Which monster?");
+
+    /* Find the monster. */
+    get_target(d.px, d.py, &tx, &ty);
+
+    /* Command aborted? */
+    if (tx == -1 || ty == -1)
+      return;
+
+    if (is_monster_at(tx, ty))
+    {
+      struct monster *m = get_monster_at(tx, ty);
+      set_charge_actor(&d.pa, &m->a, tx, ty);
+    }
   }
 }
 

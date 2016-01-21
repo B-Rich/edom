@@ -104,8 +104,9 @@ void map_cursor(coord, coord);
 void paint_tile(coord, coord);
 void paint_tile_at_position(coord, coord);
 void change_door(coord, coord, byte);
-BOOL is_floor(coord x, coord y);
+BOOL is_floor(coord, coord);
 void set_knowledge(coord, coord, byte);
+BOOL is_reachable(coord, coord, coord);
 void move_dungeon(void);
 void draw_dungeon(void);
 

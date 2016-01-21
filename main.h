@@ -122,8 +122,6 @@ int screen_height;
 
 FONT *font;
 
-struct anim_info common_anim;
-
 void flip(void);
 
 #endif

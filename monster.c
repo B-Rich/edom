@@ -55,10 +55,23 @@ struct monster_struct m;
 /* The complete monster list for the game. */
 struct monster_def md[MAX_MONSTER] =
 {
-  {"hydra.png", 24, 28, "hydra", 14, "1d4", 1, 0, "1d6", COMMON},
-  {"gargoyle.png", 24, 32, "gargoyle", 12, "1d3", 1, 0, "1d3", COMMON},
-  {"reaper.png", 32, 32, "reaper", 13, "1d8", 1, 0, "1d6", COMMON},
-  {"samurai.png", 31, 32, "samurai", 18, "2d3", 1, +1, "1d4", RARE}
+  {"hydra.png",    24, 28, "hydra",    14, "1d4", 1, 1,  0, "1d6", COMMON},
+  {"gargoyle.png", 24, 32, "gargoyle", 12, "1d3", 1, 1,  0, "1d3", COMMON},
+  {"reaper.png",   32, 32, "reaper",   13, "1d8", 1, 1,  0, "1d6", COMMON},
+  {"samurai.png",  31, 32, "samurai",  18, "2d3", 1, 1, +1, "1d4", RARE}
+};
+
+struct anim_info monster_anim =
+{
+  0, 0,
+  3, 6, 9, 0,
+  3,
+  2,
+  3,
+  3, 6, 9, 0,
+  0,
+  0,
+  60
 };
 
 /* The dynamic index map for one monster level. */
@@ -79,6 +92,7 @@ byte monster_level(byte);
 int16 monster_rarity(byte);
 void create_monster_in(byte midx);
 int16 mhits(byte);
+int16 mdamage(byte);
 
 
 
@@ -270,7 +284,7 @@ void create_monster_in(byte midx)
   /* Initialize actor based on monster type */
   init_actor(&m.m[d.dl][midx].a,
              md[type].filename, md[type].w, md[type].h,
-             &common_anim);
+             &monster_anim);
 
   /* Adjust the 'empty' index. */
   if (m.eidx[d.dl] == midx)
@@ -322,6 +336,11 @@ int16 mhits(byte midx)
 }
 
 
+
+int16 mdamage(byte midx)
+{
+  return dice(md[midx].damage);
+}
 
 /*
  * Return the first potentially empty monster slot.
@@ -379,18 +398,18 @@ void attack_monster_at(coord x, coord y)
   struct monster *mi = get_monster_at(x, y);
 
   /* TODO */
-  int damage = 1;
+  int16 damage = 1;
 
   mi->hp -= damage;
   if (mi->hp <= 0)
   {
-    you("%s perrished.", md[mi->midx].name);
+    message("%s perished.", md[mi->midx].name);
+    set_perished_actor(&mi->a);
     remove_monster_at(x, y);
   }
   else
   {
-    set_counter_actor(&mi->a, &d.pa);
-    you("Attacked %s and caused %d damage.", md[mi->midx].name, damage);
+    message("Attacked %s and caused %d damage.", md[mi->midx].name, damage);
   }
 }
 
@@ -470,8 +489,8 @@ void move_monster(struct monster *m, enum facing dir)
     midx[m->x][m->y] = -1;
 
     /* Update monster position */
-    m->x += m->a.dx;
-    m->y += m->a.dy;
+    m->x += m->a.tx;
+    m->y += m->a.ty;
 
     /* Set index in slot at new position */
     midx[m->x][m->y] = i;
@@ -483,9 +502,10 @@ void move_monster(struct monster *m, enum facing dir)
  * Handle the monster turn: movement, combat, etc.
  */
 
-void move_monsters(void)
+BOOL move_monsters(void)
 {
   coord x, y;
+  BOOL end_of_turn = TRUE;
   int sx = d.map_x / TILE_WIDTH;
   int sy = d.map_y / TILE_HEIGHT;
 
@@ -495,14 +515,20 @@ void move_monsters(void)
       {
         struct monster *mi = get_monster_at(sx + x, sy + y);
 
-        if (mi->a.act == COUNTER)
+        if (mi->a.act == CHARGE)
         {
-          move_counter_actor(&mi->a);
+          animate_charge_actor(&mi->a);
+          end_of_turn = FALSE;
         }
         else if (mi->a.act == ATTACK)
         {
-          message("%s attacked you.", md[mi->midx].name);
-          mi->a.act = IDLE;
+          if (animate_attack_actor(&mi->a))
+          {
+            int16 damage = mdamage(mi->midx);
+            message("%s attacked you with %d damage.",
+                    md[mi->midx].name, damage);
+            damage_player(damage);
+          }
         }
         else if (mi->a.act == MOVE)
         {
@@ -530,7 +556,9 @@ void move_monsters(void)
           }
           else if (mi->state == ANGRY)
           {
-            if (d.px < mi->x && is_clear(mi, LEFT))
+            if (is_reachable(mi->x, mi->y, md[mi->midx].range))
+              set_charge_actor(&mi->a, &d.pa, d.px, d.py);
+            else if (d.px < mi->x && is_clear(mi, LEFT))
               move_monster(mi, LEFT);
             else if (d.px > mi->x && is_clear(mi, RIGHT))
               move_monster(mi, RIGHT);
@@ -543,6 +571,8 @@ void move_monsters(void)
           }
         }
       }
+
+  return end_of_turn;
 }
 
 

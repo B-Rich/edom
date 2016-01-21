@@ -111,6 +111,7 @@ void set_attribute(byte, byte);
 void adjust_training(void);
 void score_exp(int32);
 
+void damage_player(int16 damage);
 void place_player(byte px, byte py);
 void move_player(enum facing dir);
 void animate_player(void);

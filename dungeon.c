@@ -839,6 +839,36 @@ void set_knowledge(coord x, coord y, byte known)
     d.known[d.dl][x >> 3][y] &= (~(1 << (x % 8)));
 }
 
+
+BOOL is_reachable(coord x, coord y, coord range)
+{
+  coord i;
+  BOOL result = FALSE;
+
+  if (d.py == y && abs(d.px - x) <= range)
+  {
+    result = TRUE;
+    for (i = 0; i <= range; i++)
+      if (is_monster_at(i, y))
+      {
+        result = FALSE;
+        break;
+      }
+  }
+  else if (d.px == x && abs(d.py - y) <= range)
+  {
+    result = TRUE;
+    for (i = 0; i <= range; i++)
+      if (is_monster_at(x, i))
+      {
+        result = FALSE;
+        break;
+      }
+  }
+
+  return result;
+}
+
 void move_dungeon(void)
 {
   int mw, mh;

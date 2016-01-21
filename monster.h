@@ -97,6 +97,9 @@ struct monster_def
   /* Number of attacks. */
   byte attacks;
 
+  /* Monster attack range */
+  byte range;
+
   /* To-hit bonus. */
   byte to_hit;
 
@@ -140,7 +143,7 @@ void build_monster_map(void);
 void create_monster_in(byte);
 void create_population(void);
 void move_monster(struct monster *m, enum facing dir);
-void move_monsters(void);
+BOOL move_monsters(void);
 void draw_monsters(void);
 
 #endif

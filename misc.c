@@ -128,12 +128,8 @@ void more(void)
 
 void clear_messages(void)
 {
-#if 0
-  cursor(0, 0);
-  clear_to_eol();
   mbuffer_full = FALSE;
   mbuffer_x = 0;
-#endif
 }
 
 

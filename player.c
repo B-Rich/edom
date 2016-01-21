@@ -52,7 +52,9 @@ static struct anim_info player_anim =
   2,
   4,
   8, 13, 18, 3,
-  2
+  2,
+  20,
+  16
 };
 
 /*
@@ -471,6 +473,18 @@ void score_exp(int32 x)
   update_necessary = TRUE;
 }
 
+void damage_player(int16 damage)
+{
+  d.pc.hits -= damage;
+  if (d.pc.hits <= 0)
+  {
+    message("Player perished.");
+    set_perished_actor(&d.pa);
+  }
+
+  update_necessary = TRUE;
+}
+
 void place_player(byte px, byte py)
 {
   d.px = px;
@@ -482,8 +496,8 @@ void place_player(byte px, byte py)
   d.pa.y = (int16) py * TILE_HEIGHT;
 
   d.pa.act = IDLE;
-  d.pa.dx = 0;
-  d.pa.dy = 0;
+  d.pa.tx = 0;
+  d.pa.ty = 0;
 
   set_dir_actor(&d.pa, DOWN);
 }
@@ -493,8 +507,8 @@ void move_player(enum facing dir)
   if (d.pa.act == IDLE)
   {
     move_actor(&d.pa, dir);
-    d.px += d.pa.dx;
-    d.py += d.pa.dy;
+    d.px += d.pa.tx;
+    d.py += d.pa.ty;
   }
 }
 
